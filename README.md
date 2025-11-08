@@ -15,8 +15,8 @@ Unifies negentropy [Schrödinger, 1944] with modern quantum info [Horodecki et a
 - `o.tex`: LaTeX source for the paper.
 - `ographs.html`: Interactive plots (Chart.js) for Friedmann cosmic expansion and qubit decoherence.
 - `o.py`: Python scripts (SciPy/NumPy) for core simulations.
-- `friedmann_plots.png`: Python scripts (SciPy/NumPy) for core simulations.
-- `qubit_plots.png`: Python scripts (SciPy/NumPy) for core simulations.
+- `friedmann_plots.png`
+- `qubit_plots.png`
 
 ## Quick Start: Run Simulations
 Install dependencies: `pip install numpy scipy matplotlib`.
