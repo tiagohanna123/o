@@ -11,10 +11,12 @@ A compact, testable framework measuring entropy-syntropy balance via scalar $X =
 Unifies negentropy [Schrödinger, 1944] with modern quantum info [Horodecki et al., 1998] and entropic gravity [Verlinde, 2011]. Full preprint and code below.
 
 ## Files
-- `model_x_paper_v1.pdf`: Complete preprint (4 pages, English).
-- `model_x.tex`: LaTeX source for the paper.
-- `simulations.html`: Interactive plots (Chart.js) for Friedmann cosmic expansion and qubit decoherence.
-- `sim_code.py`: Python scripts (SciPy/NumPy) for core simulations.
+- `o.pdf`: Complete preprint (4 pages, English).
+- `o.tex`: LaTeX source for the paper.
+- `ographs.html`: Interactive plots (Chart.js) for Friedmann cosmic expansion and qubit decoherence.
+- `o.py`: Python scripts (SciPy/NumPy) for core simulations.
+- `friedmann_plots.png`: Python scripts (SciPy/NumPy) for core simulations.
+- `qubit_plots.png`: Python scripts (SciPy/NumPy) for core simulations.
 
 ## Quick Start: Run Simulations
 Install dependencies: `pip install numpy scipy matplotlib`.
