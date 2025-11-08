@@ -2,7 +2,7 @@
 
 A compact, testable framework measuring entropy-syntropy balance via scalar $X = \sigma - S$ in quantum, cosmological, and complex systems. Singularities are asymptotic horizons ($X \approx 0$), avoiding infinities in equations like Friedmann and Einstein. Derived from intuitive logic, it includes temporal dilation $d\tau/dt = \exp(-\kappa X)$, with $\kappa$ from fluctuation-dissipation.
 
-Latest release: **[https://github.com/tiagohanna123/o/releases/tag/v1.0]**
+**Latest release: [https://github.com/tiagohanna123/o/releases/tag/v1.0]**
 
 ## Overview
 - **Core Metric**: $X = k (\ln N - 2S)$, where $S$ is Shannon-Boltzmann entropy and $\sigma$ is KL divergence from uniform noise.
