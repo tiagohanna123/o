@@ -1,18 +1,15 @@
-# Model X - Empirical Validation Results
+﻿# GW150914: Validação de Ondas Gravitacionais
 
-## CMB (Cosmic Microwave Background)
-- l0 = 70.0
-- ![CMB](cmb.png)
+## 📊 Resultados Principais
 
-## QC (Quantum Computing - Simulation)
-- T2 = -62.45 + 260.00 X
-- ![QC](qc.png)
+- **SNR máximo (detector H1)**: 7.4
+- **κ ótimo**: 0.0 (modelo SEOBNRv4 já está perfeitamente calibrado)
+- **Evento**: Primeira detecção direta de ondas gravitacionais (2015)
 
-**Status**: OK - Validation completed on 08/11/2025
+![GW150914: SNR vs κ](notebooks/gw.png)
 
-## Link do Repositório
-- GitHub: https://github.com/tiagohanna123/o
+## 🚀 Como Executar
 
-## Resultados Validados
-- **CMB**: l0 = 70.0
-- **QC**: T2 = -62.45 + 260.00 X
+```bash
+cd notebooks
+python gw_validation.py
