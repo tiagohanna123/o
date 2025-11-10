@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model X Simulations - Overlaid Plots</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+    .chart-container { width: 100%; max-width: 800px; margin: 20px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    h1, h2 { text-align: center; color: #333; }
+  </style>
+</head>
+<body>
+  <h1>Model X Simulations - Overlaid Plots for Richer Insights</h1>
+  <p>Interactive overlays: Compare original vs. modified dynamics, and entropy-syntropy effects on time dilation.</p>
+
+  <div class="chart-container">
+    <h2>1. Friedmann: Scale Factor a(t) - Original vs. Modified (Overlay)</h2>
+    <canvas id="scaleChart"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <h2>2. Friedmann: Hubble H(t) - Original vs. Modified (Overlay, Log Scale)</h2>
+    <canvas id="hubbleChart"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <h2>3. Qubit: X(t) and dτ/dt Overlaid - Balance and Dilation</h2>
+    <canvas id="xDilationChart"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <h2>4. Combined Evolution: X(t) and H(t) - Multi-System Overlay</h2>
+    <canvas id="combinedChart"></canvas>
+  </div>
+
+  <script>
+    // Data from sims (expanded for overlays)
+    const data = {
+      t: [0.001, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0],
+      a_orig: [0.001, 1.65, 2.65, 3.47, 4.21, 4.89, 5.53, 6.13, 6.70, 7.25, 7.78],
+      a_mod: [0.001, 1.66, 2.65, 3.48, 4.21, 4.89, 5.53, 6.13, 6.70, 7.25, 7.78],
+      h_orig: [12255, 1.36, 0.67, 0.45, 0.33, 0.27, 0.22, 0.19, 0.17, 0.15, 0.13],
+      h_mod: [12261, 1.34, 0.67, 0.45, 0.34, 0.27, 0.22, 0.19, 0.17, 0.15, 0.13],
+      x: [0.001, -0.098, -0.047, 0.071, 0.088, -0.020, -0.100, -0.038, 0.078, 0.082, -0.031],
+      dtau: [0.995, 1.570, 1.244, 0.722, 0.666, 1.096, 1.582, 1.188, 0.698, 0.684, 1.151]
+    };
+
+    // 1. a(t) Overlay
+    new Chart(document.getElementById('scaleChart'), {
+      type: 'line',
+      data: {
+        labels: data.t,
+        datasets: [
+          { label: 'a(t) Original', data: data.a_orig, borderColor: 'red', borderDash: [5,5], yAxisID: 'y', fill: false },
+          { label: 'a(t) Modified with X', data: data.a_mod, borderColor: 'blue', yAxisID: 'y', fill: false }
+        ]
+      },
+      options: { 
+        scales: { y: { beginAtZero: true, type: 'linear', display: true, position: 'left' } }
+      }
+    });
+
+    // 2. H(t) Overlay (Log Scale)
+    new Chart(document.getElementById('hubbleChart'), {
+      type: 'line',
+      data: {
+        labels: data.t,
+        datasets: [
+          { label: 'H(t) Original', data: data.h_orig, borderColor: 'red', borderDash: [5,5], yAxisID: 'y', fill: false },
+          { label: 'H(t) Modified', data: data.h_mod, borderColor: 'blue', yAxisID: 'y', fill: false }
+        ]
+      },
+      options: { 
+        scales: { y: { type: 'logarithmic', position: 'left' } }
+      }
+    });
+
+    // 3. X(t) and dτ/dt Overlay (Dual Y-Axis for Richness)
+    new Chart(document.getElementById('xDilationChart'), {
+      type: 'line',
+      data: {
+        labels: data.t,
+        datasets: [
+          { label: 'X(t)', data: data.x, borderColor: 'green', yAxisID: 'y1', fill: false },
+          { label: 'dτ/dt', data: data.dtau, borderColor: 'purple', yAxisID: 'y2', fill: false }
+        ]
+      },
+      options: { 
+        scales: { 
+          y1: { type: 'linear', display: true, position: 'left', min: -0.15, max: 0.15 },
+          y2: { type: 'linear', display: true, position: 'right', min: 0.5, max: 1.7, grid: { drawOnChartArea: false } }
+        }
+      }
+    });
+
+    // 4. Combined: X(t) and H(t) Overlay (Normalized for Multi-System View)
+    const h_norm = data.h_mod.map(h => Math.log(h + 1) / Math.log(12261 + 1));  // Normalize H for overlay
+    new Chart(document.getElementById('combinedChart'), {
+      type: 'line',
+      data: {
+        labels: data.t,
+        datasets: [
+          { label: 'X(t) (Qubit)', data: data.x, borderColor: 'green', yAxisID: 'y1', fill: false },
+          { label: 'Normalized H(t) (Friedmann)', data: h_norm, borderColor: 'orange', yAxisID: 'y2', fill: false }
+        ]
+      },
+      options: { 
+        scales: { 
+          y1: { type: 'linear', display: true, position: 'left', min: -0.15, max: 0.15 },
+          y2: { type: 'linear', display: true, position: 'right', min: 0, max: 1, grid: { drawOnChartArea: false } }
+        },
+        plugins: { title: { display: true, text: 'Cross-System Overlay: Balance vs. Expansion' } }
+      }
+    });
+  </script>
+</body>
+</html>
