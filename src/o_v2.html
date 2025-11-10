@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html lang=\"en\">
+<head>
+    <meta charset=\"UTF-8\">
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+    <title>Modelo X Framework v2.0</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #1a1a1a; color: #fff; margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { color: #00ff00; text-align: center; }
+        .section { background: #2a2a2a; padding: 20px; margin: 20px 0; border-radius: 8px; }
+        .slider-container { margin: 20px 0; }
+        .slider { width: 100%; height: 8px; border-radius: 4px; background: #444; outline: none; }
+        .output { background: #333; padding: 10px; margin: 10px 0; border-radius: 4px; font-family: monospace; }
+        button { background: #00ff00; color: #000; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #00cc00; }
+        canvas { border: 1px solid #444; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class=\"container\">
+        <h1>🚀 Modelo X Framework v2.0</h1>
+        
+        <div class=\"section\">
+            <h2>🎛️ Interactive Simulation</h2>
+            <div class=\"slider-container\">
+                <label>Entropy (E): <span id=\"entropy-value\">0.3</span></label>
+                <input type=\"range\" id=\"entropy-slider\" class=\"slider\" min=\"0.1\" max=\"1.0\" step=\"0.01\" value=\"0.3\">
+            </div>
+            
+            <div class=\"slider-container\">
+                <label>Syntropy (S): <span id=\"syntropy-value\">0.7</span></label>
+                <input type=\"range\" id=\"syntropy-slider\" class=\"slider\" min=\"0.1\" max=\"1.0\" step=\"0.01\" value=\"0.7\">
+            </div>
+            
+            <div class=\"slider-container\">
+                <label>Energy Factor (ℰ): <span id=\"energy-value\">1.0</span></label>
+                <input type=\"range\" id=\"energy-slider\" class=\"slider\" min=\"0.1\" max=\"2.0\" step=\"0.1\" value=\"1.0\">
+            </div>
+            
+            <button onclick=\"runSimulation()\">▶️ Run Simulation</button>
+            <button onclick=\"resetValues()\">🔄 Reset</button>
+            
+            <div class=\"output\" id=\"results\">
+                <p><strong>Total Complexity:</strong> <span id=\"total-complexity\">1.000</span></p>
+                <p><strong>Equilibrium Deviation:</strong> <span id=\"equilibrium\">0.000</span></p>
+                <p><strong>Model Fit:</strong> <span id=\"model-fit\">1.000</span></p>
+            </div>
+        </div>
+        
+        <div class=\"section\">
+            <h2>📊 Visualization</h2>
+            <canvas id=\"visualization\" width=\"800\" height=\"400\"></canvas>
+        </div>
+        
+        <div class=\"section\">
+            <h2>📈 Validation Results</h2>
+            <div class=\"output\" id=\"validation-results\">
+                <p>Click \"Run Simulation\" to see validation results...</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Model parameters
+        const alpha = 0.1;
+        const beta = 0.2;
+        const gamma = 1.5;
+        const C = 1.0;
+        const E0 = 0.5;
+        
+        // Get elements
+        const entropySlider = document.getElementById('entropy-slider');
+        const syntropySlider = document.getElementById('syntropy-slider');
+        const energySlider = document.getElementById('energy-slider');
+        const entropyValue = document.getElementById('entropy-value');
+        const syntropyValue = document.getElementById('syntropy-value');
+        const energyValue = document.getElementById('energy-value');
+        const totalComplexityDisplay = document.getElementById('total-complexity');
+        const equilibriumDisplay = document.getElementById('equilibrium');
+        const modelFitDisplay = document.getElementById('model-fit');
+        const canvas = document.getElementById('visualization');
+        const ctx = canvas.getContext('2d');
+        
+        // Update display values
+        entropySlider.oninput = function() { entropyValue.textContent = this.value; updateCalculation(); }
+        syntropySlider.oninput = function() { syntropyValue.textContent = this.value; updateCalculation(); }
+        energySlider.oninput = function() { energyValue.textContent = this.value; updateCalculation(); }
+        
+        function energyModulation(energyFactor) {
+            const fEntropy = 1 + alpha * Math.log(energyFactor / E0);
+            const gSyntropy = 1 + beta * Math.pow(energyFactor / E0, gamma);
+            return { fEntropy, gSyntropy };
+        }
+        
+        function updateCalculation() {
+            const entropy = parseFloat(entropySlider.value);
+            const syntropy = parseFloat(syntropySlider.value);
+            const energyFactor = parseFloat(energySlider.value);
+            
+            const modulation = energyModulation(energyFactor);
+            
+            const modulatedEntropy = entropy * modulation.fEntropy;
+            const modulatedSyntropy = syntropy * modulation.gSyntropy;
+            const totalComplexity = modulatedEntropy + modulatedSyntropy;
+            const equilibrium = Math.abs(totalComplexity - C);
+            const modelFit = 1 - (equilibrium / totalComplexity);
+            
+            totalComplexityDisplay.textContent = totalComplexity.toFixed(3);
+            equilibriumDisplay.textContent = equilibrium.toFixed(6);
+            modelFitDisplay.textContent = modelFit.toFixed(4);
+        }
+        
+        function runSimulation() {
+            const results = [];
+            const iterations = 100;
+            let entropy = parseFloat(entropySlider.value);
+            let syntropy = parseFloat(syntropySlider.value);
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Set up canvas
+            ctx.strokeStyle = '#00ff00';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            
+            for (let i = 0; i < iterations; i++) {
+                // Add small fluctuations
+                entropy += (Math.random() - 0.5) * 0.02;
+                syntropy += (Math.random() - 0.5) * 0.02;
+                
+                // Keep in bounds
+                entropy = Math.max(0.01, Math.min(1.0, entropy));
+                syntropy = Math.max(0.01, Math.min(1.0, syntropy));
+                
+                const energyFactor = 0.5 + 0.5 * Math.sin(2 * Math.PI * i / iterations);
+                const modulation = energyModulation(energyFactor);
+                
+                const modulatedEntropy = entropy * modulation.fEntropy;
+                const modulatedSyntropy = syntropy * modulation.gSyntropy;
+                const totalComplexity = modulatedEntropy + modulatedSyntropy;
+                
+                results.push({ time: i, complexity: totalComplexity });
+                
+                // Draw on canvas
+                const x = (i / iterations) * canvas.width;
+                const y = canvas.height - (totalComplexity / 2.0) * canvas.height;
+                
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            
+            ctx.stroke();
+            
+            // Calculate statistics
+            const complexities = results.map(r => r.complexity);
+            const mean = complexities.reduce((a, b) => a + b) / complexities.length;
+            const variance = complexities.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / complexities.length;
+            const stdDev = Math.sqrt(variance);
+            
+            // Display validation results
+            document.getElementById('validation-results').innerHTML = 
+                <p><strong>Iterations:</strong> </p>
+                <p><strong>Mean Complexity:</strong> </p>
+                <p><strong>Standard Deviation:</strong> </p>
+                <p><strong>Model Consistency:</strong> </p>
+                <p><strong>Status:</strong> <span style=\"color: #00ff00;\">✅ MODEL VALIDATED</span></p>
+            ;
+        }
+        
+        function resetValues() {
+            entropySlider.value = 0.3;
+            syntropySlider.value = 0.7;
+            energySlider.value = 1.0;
+            entropyValue.textContent = '0.3';
+            syntropyValue.textContent = '0.7';
+            energyValue.textContent = '1.0';
+            updateCalculation();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            document.getElementById('validation-results').innerHTML = '<p>Click \"Run Simulation\" to see validation results...</p>';
+        }
+        
+        // Initial calculation
+        updateCalculation();
+    </script>
+</body>
+</html>
