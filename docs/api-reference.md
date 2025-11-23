@@ -1,10 +1,10 @@
-# API Reference - Modelo X Framework v3.0
+# API Reference - Model X Framework v3.0
 
-Documentação completa da API do Modelo X Framework.
+Complete API documentation for the Model X Framework.
 
 ---
 
-## Sumário
+## Table of Contents
 
 - [EnergyModulatedModel](#energymodulatedmodel)
 - [EntropySyntropyCalculator](#entropysyntropyalculator)
@@ -17,121 +17,121 @@ Documentação completa da API do Modelo X Framework.
 
 ## EnergyModulatedModel
 
-Classe principal para modelagem de sistemas entropia-sintropia-energia.
+Main class for entropy-syntropy-energy system modeling.
 
-### Construtor
+### Constructor
 
 ```python
 EnergyModulatedModel(entropy=0.5, syntropy=0.5, energy=1.0)
 ```
 
-**Parâmetros:**
-| Parâmetro | Tipo | Padrão | Descrição |
+**Parameters:**
+| Parameter | Type | Default | Description |
 |-----------|------|--------|-----------|
-| entropy | float | 0.5 | Nível de entropia [0, ∞) → clamped ≥ 0 |
-| syntropy | float | 0.5 | Nível de sintropia [0, ∞) → clamped ≥ 0 |
-| energy | float | 1.0 | Energia do sistema [0.1, ∞) |
+| entropy | float | 0.5 | Entropy level [0, ∞) → clamped ≥ 0 |
+| syntropy | float | 0.5 | Syntropy level [0, ∞) → clamped ≥ 0 |
+| energy | float | 1.0 | System energy [0.1, ∞) |
 
-**Exemplo:**
+**Example:**
 ```python
 from model_x import EnergyModulatedModel
 
 model = EnergyModulatedModel(entropy=0.3, syntropy=0.7, energy=2.0)
 ```
 
-### Métodos
+### Methods
 
 #### compute_temporal_dilation()
 
-Calcula a dilatação temporal: `τ = ℰ × (1 + (S - E))`
+Calculates temporal dilation: `τ = ℰ × (1 + (S - E))`
 
-**Retorno:** `float` - Fator de dilatação temporal
+**Returns:** `float` - Temporal dilation factor
 
 #### compute_modulation(alpha=0.3, beta=0.7, gamma=1.5)
 
-Calcula funções de modulação energética.
+Calculates energy modulation functions.
 
-**Retorno:** `tuple(float, float)` - (f_E, g_S)
+**Returns:** `tuple(float, float)` - (f_E, g_S)
 
 #### simulate(steps=100, dt=0.01)
 
-Simula evolução temporal.
+Simulates temporal evolution.
 
-**Retorno:** `list[dict]` - Lista de estados {step, time, dilation}
+**Returns:** `list[dict]` - List of states {step, time, dilation}
 
 ---
 
 ## EntropySyntropyCalculator
 
-Calculadora de entropia de Shannon e sintropia.
+Shannon entropy and syntropy calculator.
 
-### Métodos
+### Methods
 
 #### calculate_shannon_entropy(data, bins=10)
 
-**Retorno:** `float` - Entropia normalizada [0, 1]
+**Returns:** `float` - Normalized entropy [0, 1]
 
 #### calculate_syntropy(data, method="complement")
 
-**Retorno:** `float` - Sintropia [0, 1]
+**Returns:** `float` - Syntropy [0, 1]
 
 ---
 
 ## EnergyModulationEngine
 
-Motor de modulação energética.
+Energy modulation engine.
 
-### Métodos
+### Methods
 
 #### modulate_energy(entropy, syntropy, energy, modulation_type="adaptive")
 
-**Tipos:** "adaptive", "conservative", "basic"
+**Types:** "adaptive", "conservative", "basic"
 
-**Retorno:** `tuple(float, float, tuple)` - (f_E×ℰ, g_S×ℰ, params)
+**Returns:** `tuple(float, float, tuple)` - (f_E×ℰ, g_S×ℰ, params)
 
 ---
 
 ## SimulationEngine
 
-Motor de simulação temporal.
+Temporal simulation engine.
 
-### Construtor
+### Constructor
 
 ```python
 SimulationEngine(dt=0.01, max_steps=10000)
 ```
 
-### Métodos
+### Methods
 
 #### run_simulation(initial_state, simulation_type="deterministic")
 
-**Retorno:** `list[dict]` - Histórico {step, time, state, dilation}
+**Returns:** `list[dict]` - History {step, time, state, dilation}
 
 #### get_statistics()
 
-**Retorno:** `dict` - {total_steps, mean_dilation, std_dilation}
+**Returns:** `dict` - {total_steps, mean_dilation, std_dilation}
 
 ---
 
 ## ModelXVisualizer
 
-### Métodos
+### Methods
 
-- `export_simulation_data(history, filename)` - Exporta JSON
-- `ascii_plot(data, title, width, height)` - Gráfico ASCII
-- `print_simulation_summary(history)` - Resumo formatado
-- `generate_report(domains_data, output_file)` - Relatório
+- `export_simulation_data(history, filename)` - Export JSON
+- `ascii_plot(data, title, width, height)` - ASCII plot
+- `print_simulation_summary(history)` - Formatted summary
+- `generate_report(domains_data, output_file)` - Report
 
 ---
 
 ## ValidationUtils
 
-### Métodos Estáticos
+### Static Methods
 
-- `validate_parameters(E, S, ℰ)` - Valida parâmetros
-- `create_default_datasets()` - Cria 4 datasets de validação
+- `validate_parameters(E, S, ℰ)` - Validates parameters
+- `create_default_datasets()` - Creates 4 validation datasets
 - `calculate_validation_metrics(results, expected)` - Score 0-100
 
 ---
 
-**v3.0.0 - Novembro 2025**
+**v3.0.0 - November 2025**
