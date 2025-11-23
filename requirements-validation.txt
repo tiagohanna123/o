@@ -1,0 +1,18 @@
+# Optional dependencies for astrophysical validation scripts
+# Install with: pip install -r requirements-validation.txt
+
+# For GW150914 validation (notebooks/gw_validation.py)
+gwpy>=3.0.0
+pycbc>=2.0.0
+
+# For CMB validation (notebooks/cmb_validation.py)
+camb>=1.3.0
+emcee>=3.1.0
+
+# For Quantum Computing validation (notebooks/qc_validation.py)
+pandas>=1.3.0
+scikit-learn>=1.0.0
+
+# Note: These are optional and only needed if you want to run the
+# astrophysical validation scripts. The core Modelo X Framework
+# only requires the dependencies in requirements.txt

@@ -6,7 +6,8 @@ o/
 │   ├── SOLUCOES_CONCRETAS.json     # Soluções dos 10 problemas (JSON)
 │   ├── scientific_problems_results.json
 │   ├── validation_*.json           # Dados de validação por área
-│   └── validation_data.csv
+│   ├── validation_data.csv
+│   └── planck_tt.txt               # Dados CMB do Planck
 │
 ├── docs/                           # Documentação
 │   ├── pdf/                        # Documentos PDF
@@ -33,7 +34,19 @@ o/
 ├── legacy/                         # Versões anteriores
 │   └── v1/
 │
-├── notebooks/                      # Jupyter notebooks
+├── notebooks/                      # Jupyter notebooks e validações
+│   ├── tutorial_interactive.ipynb  # Tutorial interativo
+│   ├── cmb_validation.py           # Validação CMB (Planck)
+│   ├── gw_validation.py            # Validação GW150914
+│   ├── qc_validation.py            # Validação Quantum Computing
+│   └── *.png                       # Resultados visuais
+│
+├── quantum/                        # Experimentos IBM Quantum
+│   ├── ibm_quantum_runner.py       # Runner principal
+│   ├── quantum_config.py           # Configuração
+│   ├── requirements_quantum.txt    # Dependências quantum
+│   ├── README_QUANTUM.md           # Documentação
+│   └── results/                    # Resultados experimentais
 │
 ├── scripts/                        # Scripts de geração
 │   ├── SOLUCOES_CONCRETAS.py      # Cálculo das soluções

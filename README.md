@@ -239,8 +239,38 @@ O framework foi validado em múltiplos domínios:
 3. **Física**: Sistemas oscilatórios com harmônicos
 4. **Redes**: Análise de tráfego de dados
 5. **Termodinâmica**: Evolução de sistemas energéticos
-6. **Computação Quântica**: Estados de qubits
+6. **Computação Quântica**: Estados de qubits (ver `quantum/`)
 7. **Cosmologia**: Modelos de expansão universal
+
+### Experimentos Adicionais
+
+#### Validações Astrofísicas (notebooks/)
+- **GW150914**: Validação de ondas gravitacionais (primeira detecção direta 2015)
+  - Script: `notebooks/gw_validation.py`
+  - SNR máximo (detector H1): 7.4
+  - κ ótimo: 0.0
+  
+- **CMB (Cosmic Microwave Background)**: Validação da radiação cósmica de fundo
+  - Script: `notebooks/cmb_validation.py`
+  - Dados: `data/planck_tt.txt` (dados do Planck)
+  
+- **Computação Quântica**: Validação de circuitos quânticos
+  - Script: `notebooks/qc_validation.py`
+
+#### Experimentos Quânticos IBM (quantum/)
+- Validação experimental usando IBM Quantum Experience
+- Script principal: `quantum/ibm_quantum_runner.py`
+- Configuração: `quantum/quantum_config.py`
+- Documentação: `quantum/README_QUANTUM.md`
+- Resultados salvos em: `quantum/results/`
+
+```bash
+# Para executar experimentos quânticos
+cd quantum
+pip install -r requirements_quantum.txt
+python quantum_config.py  # Configurar credenciais IBM Quantum
+python ibm_quantum_runner.py
+```
 
 ---
 

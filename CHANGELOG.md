@@ -2,6 +2,47 @@
 
 ---
 
+## v3.1.0 - Branch Consolidation - Novembro 2025
+
+### Resumo
+Consolidação de todos os branches do repositório em um único branch principal, preservando toda funcionalidade de validações astrofísicas e experimentos quânticos.
+
+### Novidades
+
+#### Consolidação de Branches
+- **Merged branches**: main, master, experimental-quantum, v2.0-expansion
+- Todos os branches secundários consolidados em um único branch
+- Funcionalidade completa preservada
+
+#### Validações Astrofísicas Adicionadas
+- **GW150914**: Script de validação de ondas gravitacionais
+  - Arquivo: `notebooks/gw_validation.py`
+  - Dados e visualizações incluídos
+- **CMB (Planck)**: Validação da radiação cósmica de fundo
+  - Arquivo: `notebooks/cmb_validation.py`
+  - Dados: `data/planck_tt.txt`
+- **Quantum Computing**: Validação de circuitos quânticos
+  - Arquivo: `notebooks/qc_validation.py`
+
+#### Experimentos IBM Quantum
+- Nova pasta `quantum/` com experimentos IBM Quantum Experience
+  - `ibm_quantum_runner.py`: Runner principal
+  - `quantum_config.py`: Configuração de credenciais
+  - `requirements_quantum.txt`: Dependências específicas
+  - `README_QUANTUM.md`: Documentação dos experimentos
+  - `results/`: Resultados experimentais salvos
+
+#### Documentação Atualizada
+- README.md atualizado com seção de experimentos adicionais
+- STRUCTURE.md atualizado com nova organização
+- Adicionadas instruções para executar experimentos quânticos
+
+#### Limpeza do Repositório
+- .gitignore já configurado para excluir venv/
+- Branches organizados e consolidados
+
+---
+
 ## v3.0.0 - Novembro 2025
 
 ### Resumo
