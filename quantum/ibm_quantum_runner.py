@@ -30,6 +30,8 @@ def run_experiment(service, backend_name='least_busy', t_points=11, shots=4096):
     # ✅ Selecionar backend com menos jobs
     if backend_name == 'least_busy':
         backends = service.backends(operational=True, simulator=False)
+        if not backends:
+            raise RuntimeError("No operational quantum backends available")
         backend = min(backends, key=lambda b: b.status().pending_jobs)
     else:
         backend = service.backend(backend_name)

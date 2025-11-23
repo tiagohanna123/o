@@ -12,11 +12,16 @@ os.makedirs(data_dir, exist_ok=True)
 planck_file = os.path.join(data_dir, 'planck_tt.txt')
 if not os.path.exists(planck_file):
     print("Downloading Planck CMB data...")
-    urllib.request.urlretrieve(
-        "https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_PowerSpect_CMB-TT-full_R3.01.txt", 
-        planck_file
-    )
-    print(f"Data saved to {planck_file}")
+    try:
+        urllib.request.urlretrieve(
+            "https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_PowerSpect_CMB-TT-full_R3.01.txt", 
+            planck_file
+        )
+        print(f"Data saved to {planck_file}")
+    except Exception as e:
+        print(f"Error downloading Planck data: {e}")
+        print("Please download manually or check network connection")
+        raise
 
 # Load data
 ell, Dl_TT = np.loadtxt(planck_file, unpack=True, usecols=(0,1))[:2000]
