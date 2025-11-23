@@ -84,20 +84,39 @@ class TestModelXVisualizer(unittest.TestCase):
     
     def test_generate_report(self):
         """Testa geração de relatório"""
-        # Criar histórico de teste
-        history = self.sim.run_simulation({'entropy': 0.5, 'syntropy': 0.5, 'energy': 1.0})
-        
+        # Criar dados de domínio no formato esperado por generate_report
+        domains_data = [
+            {
+                'domain': 'finance',
+                'entropy_real': 0.85,
+                'syntropy_real': 0.15,
+                'mean_dilation': 1.2,
+                'validation_score': 85.0,
+                'status': 'VALIDADO'
+            },
+            {
+                'domain': 'biology',
+                'entropy_real': 0.45,
+                'syntropy_real': 0.55,
+                'mean_dilation': 1.5,
+                'validation_score': 92.0,
+                'status': 'VALIDADO'
+            }
+        ]
+
         # Gerar relatório
         report_file = 'test_report.txt'
-        report_text = self.viz.generate_report(history, report_file)
-        
+        report_text = self.viz.generate_report(domains_data, report_file)
+
         # Verificar se arquivo foi criado
         self.assertTrue(os.path.exists(report_file))
-        
+
         # Verificar conteúdo
         self.assertIn("MODELO X FRAMEWORK", report_text)
-        self.assertIn("Total de passos", report_text)
-        
+        self.assertIn("Total de domínios", report_text)
+        self.assertIn("FINANCE", report_text)
+        self.assertIn("BIOLOGY", report_text)
+
         # Limpar
         if os.path.exists(report_file):
             os.remove(report_file)
