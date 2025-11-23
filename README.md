@@ -1,10 +1,12 @@
-# Modelo X Framework v3.0
+# Modelo X Framework v3.1
 
 **Framework Hiperdimensional para Análise de Complexidade Universal**
 
 [![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Validation Score](https://img.shields.io/badge/validation-93.0%2F100-green.svg)](./VALIDATION_REPORT.md)
+
+> **📋 Novidades na v3.1.0**: Consolidação de branches, validações astrofísicas (GW150914, CMB, Quantum Computing) e experimentos IBM Quantum! Veja o [CHANGELOG](./CHANGELOG.md) para detalhes completos.
 
 ---
 
@@ -302,7 +304,7 @@ Se usar este framework em pesquisas acadêmicas:
 @software{modelo_x_framework,
   author = {Hanna, Tiago},
   title = {Modelo X Framework: Hyperdimensional Theory of Universal Complexity},
-  version = {3.0.0},
+  version = {3.1.0},
   year = {2025},
   url = {https://github.com/tiagohanna123/o}
 }
@@ -324,6 +326,6 @@ MIT License - veja [LICENSE](./LICENSE) para detalhes.
 
 ---
 
-**Versão**: 3.0.0
+**Versão**: 3.1.0
 **Última atualização**: Novembro 2025
 **Status**: Produção/Estável - Validado com 93.0/100
