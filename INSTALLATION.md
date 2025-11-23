@@ -1,31 +1,31 @@
-# Instalação e Uso - Modelo X Framework v2.0
+# Installation and Usage - Model X Framework v2.0
 
-## 🚀 **Instalação Rápida**
+## 🚀 **Quick Installation**
 
-### **Pré-requisitos:**
+### **Prerequisites:**
 - Python 3.7+
-- pip (gerenciador de pacotes Python)
-- Navegador web moderno (Chrome, Firefox, Safari, Edge)
+- pip (Python package manager)
+- Modern web browser (Chrome, Firefox, Safari, Edge)
 
-### **1. Instalação via pip:**
+### **1. Installation via pip:**
 ```bash
-# Instalar dependências necessárias
+# Install required dependencies
 pip install numpy scipy matplotlib plotly pandas
 
-# Opcional: para visualizações avançadas
+# Optional: for advanced visualizations
 pip install plotly-express kaleido
 
-# Para desenvolvimento
+# For development
 pip install jupyter notebook
 ```
 
-### **2. Verificação da instalação:**
+### **2. Verify installation:**
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 
-print("Modelo X v2.0 - Dependências instaladas com sucesso!")
+print("Model X v2.0 - Dependencies successfully installed!")
 print(f"NumPy: {np.__version__}")
 print(f"Matplotlib: {plt.matplotlib.__version__}")
 print(f"Plotly: {go.__version__}")
@@ -33,314 +33,314 @@ print(f"Plotly: {go.__version__}")
 
 ---
 
-## 📁 **Estrutura de Arquivos**
+## 📁 **File Structure**
 
 ```
 v2_repo/
-├── README.md                    # Documentação principal
-├── o_v2.py                     # Scripts Python principais
-├── o_v2.html                   # Visualizações interativas
-├── scientific_paper_professional.html  # Paper científico
-├── decadimensional_model.md     # Submodelo decadimensional
-├── philosophical_paper_academic.md    # Análise filosófica
-├── CHANGELOG.md                # Histórico de mudanças
-├── LICENSE                     # Licença MIT
-└── INSTALLATION.md            # Este arquivo
+├── README.md                    # Main documentation
+├── o_v2.py                     # Main Python scripts
+├── o_v2.html                   # Interactive visualizations
+├── scientific_paper_professional.html  # Scientific paper
+├── decadimensional_model.md     # Decadimensional submodel
+├── philosophical_paper_academic.md    # Philosophical analysis
+├── CHANGELOG.md                # Change history
+├── LICENSE                     # MIT License
+└── INSTALLATION.md            # This file
 ```
 
 ---
 
-## 🎯 **Uso Básico**
+## 🎯 **Basic Usage**
 
-### **1. Executar Simulações Python:**
+### **1. Run Python Simulations:**
 ```python
-# Importar o módulo
+# Import module
 from o_v2 import ModelXv2
 
-# Criar instância do modelo
+# Create model instance
 model = ModelXv2()
 
-# Simulação de qubit
+# Qubit simulation
 import numpy as np
 time_points = np.linspace(0, 5, 100)
 qubit_data = model.simulate_qubit_decoherence(time_points)
 
-# Simulação biológica
+# Biological simulation
 bio_data = model.simulate_biological_system(
     time_points, 
     metabolic_rate=1.0, 
     nutrients=0.8
 )
 
-# Validar modelo
+# Validate model
 validation = model.validate_model(qubit_data)
 print(validation)
 ```
 
-### **2. Executar Visualizações Interativas:**
+### **2. Run Interactive Visualizations:**
 
-#### **Opção A: Abrir HTML diretamente**
+#### **Option A: Open HTML directly**
 ```bash
-# Navegar até o diretório
+# Navigate to directory
 cd v2_repo
 
-# Abrir no navegador
+# Open in browser
 open o_v2.html  # Mac
 start o_v2.html  # Windows
 xdg-open o_v2.html  # Linux
 ```
 
-#### **Opção B: Servir com Python**
+#### **Option B: Serve with Python**
 ```bash
-# Iniciar servidor web local
+# Start local web server
 python -m http.server 8000
 
-# Acessar no navegador
+# Access in browser
 # http://localhost:8000/o_v2.html
 ```
 
-#### **Opção C: Jupyter Notebook**
+#### **Option C: Jupyter Notebook**
 ```python
-# Criar notebook interativo
+# Create interactive notebook
 import plotly.graph_objects as go
 from o_v2 import ModelXv2, ModelXVisualizer
 
 model = ModelXv2()
 visualizer = ModelXVisualizer()
 
-# Criar visualização
+# Create visualization
 fig = visualizer.plot_energy_modulation(energy_data)
 fig.show()
 ```
 
 ---
 
-## 🎮 **Funcionalidades Interativas**
+## 🎮 **Interactive Features**
 
-### **1. Demonstração de Fundamentos:**
-- **Sliders**: Ajustar entropia, syntropia e energia
-- **Visualização**: Ver impacto em tempo real
-- **Interpretação**: Texto explicativo dinâmico
+### **1. Fundamentals Demonstration:**
+- **Sliders**: Adjust entropy, syntropy, and energy
+- **Visualization**: See real-time impact
+- **Interpretation**: Dynamic explanatory text
 
-### **2. Modulação Energética:**
-- **Controles**: Energia de referência, coeficientes α e β
-- **Gráficos**: Funções de modulação f(ℰ) e g(ℰ)
-- **Zonas**: Identificação automática de regimes
+### **2. Energy Modulation:**
+- **Controls**: Reference energy, α and β coefficients
+- **Graphs**: Modulation functions f(ℰ) and g(ℰ)
+- **Zones**: Automatic regime identification
 
-### **3. Submodelo Decadimensional:**
-- **Transições**: Simular saltos dimensionais
-- **Simbologia**: Decodificação de símbolos numéricos
-- **Validação**: Verificar transições permitidas
+### **3. Decadimensional Submodel:**
+- **Transitions**: Simulate dimensional jumps
+- **Symbology**: Numerical symbol decoding
+- **Validation**: Verify allowed transitions
 
-### **4. Simulações Práticas:**
-- **Sistema Quântico**: Decoerência e coerência
-- **Sistema Biológico**: Metabolismo celular
-- **Sistema Econômico**: Mercados e volatilidade
-- **Sistema de Rede**: Topologia e tráfego
+### **4. Practical Simulations:**
+- **Quantum System**: Decoherence and coherence
+- **Biological System**: Cellular metabolism
+- **Economic System**: Markets and volatility
+- **Network System**: Topology and traffic
 
 ---
 
-## 📊 **Análise de Dados**
+## 📊 **Data Analysis**
 
-### **1. Exportar Dados:**
+### **1. Export Data:**
 ```python
-# Exportar simulação para JSON
+# Export simulation to JSON
 model.export_simulation_data(qubit_data, 'qubit_results.json')
 
-# Exportar validação
+# Export validation
 import json
 with open('validation_results.json', 'w') as f:
     json.dump(validation, f, indent=2)
 ```
 
-### **2. Análise Estatística:**
+### **2. Statistical Analysis:**
 ```python
-# Importar bibliotecas de análise
+# Import analysis libraries
 import pandas as pd
 from scipy import stats
 
-# Carregar dados
+# Load data
 with open('qubit_results.json', 'r') as f:
     data = json.load(f)
 
-# Criar DataFrame
+# Create DataFrame
 df = pd.DataFrame(data)
 
-# Análise descritiva
+# Descriptive analysis
 print(df.describe())
 
-# Testes de normalidade
+# Normality tests
 shapiro_stat, shapiro_p = stats.shapiro(df['X_scalar'])
 print(f"Shapiro-Wilk: p = {shapiro_p}")
 
-# Correlações
+# Correlations
 correlation = df['X_scalar'].corr(df['temporal_dilation'])
-print(f"Correlação: r = {correlation}")
+print(f"Correlation: r = {correlation}")
 ```
 
 ---
 
-## 🔧 **Configurações Avançadas**
+## 🔧 **Advanced Settings**
 
-### **1. Parâmetros do Modelo:**
+### **1. Model Parameters:**
 ```python
-# Modificar constantes do modelo
-model.constants['alpha'] = 0.5  # Modulação entrópica
-model.constants['beta'] = 0.8   # Modulação sintrópica
-model.constants['gamma'] = 1.5  # Expoente de modulação
+# Modify model constants
+model.constants['alpha'] = 0.5  # Entropic modulation
+model.constants['beta'] = 0.8   # Syntropic modulation
+model.constants['gamma'] = 1.5  # Modulation exponent
 
-# Ajustar energia de referência
+# Adjust reference energy
 model.constants['epsilon_0'] = 2.0
 ```
 
-### **2. Configurações de Visualização:**
+### **2. Visualization Settings:**
 ```python
-# Personalizar gráficos
+# Customize graphs
 fig.update_layout(
-    title="Minha Simulação Personalizada",
+    title="My Custom Simulation",
     template="plotly_dark",
     font=dict(family="Arial", size=14),
     showlegend=True
 )
 
-# Salvar como HTML interativo
-fig.write_html("minha_simulacao.html")
+# Save as interactive HTML
+fig.write_html("my_simulation.html")
 
-# Salvar como imagem estática
-fig.write_image("minha_simulacao.png", width=1200, height=800)
+# Save as static image
+fig.write_image("my_simulation.png", width=1200, height=800)
 ```
 
 ---
 
-## 🐛 **Solução de Problemas**
+## 🐛 **Troubleshooting**
 
-### **Problema: Erro de importação**
+### **Problem: Import error**
 ```python
-# Solução: Instalar dependências faltantes
+# Solution: Install missing dependencies
 pip install numpy scipy matplotlib plotly
 ```
 
-### **Problema: Gráficos não aparecem**
+### **Problem: Graphs don't appear**
 ```python
-# Solução: Verificar backend do matplotlib
+# Solution: Check matplotlib backend
 import matplotlib
-matplotlib.use('TkAgg')  # ou 'Qt5Agg'
+matplotlib.use('TkAgg')  # or 'Qt5Agg'
 import matplotlib.pyplot as plt
 ```
 
-### **Problema: Plotly não renderiza**
+### **Problem: Plotly doesn't render**
 ```python
-# Solução: Usar modo offline
+# Solution: Use offline mode
 import plotly.io as pio
 pio.renderers.default = "browser"
 ```
 
-### **Problema: Performance lenta**
+### **Problem: Slow performance**
 ```python
-# Solução: Reduzir resolução da simulação
-# Reduzir número de pontos de tempo
-time_points = np.linspace(0, 5, 50)  # ao invés de 100
+# Solution: Reduce simulation resolution
+# Reduce number of time points
+time_points = np.linspace(0, 5, 50)  # instead of 100
 
-# Usar numba para aceleração
+# Use numba for acceleration
 from numba import jit
 
 @jit(nopython=True)
 def fast_calculation(data):
-    # código acelerado
+    # accelerated code
     return result
 ```
 
 ---
 
-## 📚 **Recursos Adicionais**
+## 📚 **Additional Resources**
 
-### **1. Documentação Completa:**
-- `README.md` - Visão geral e teoria
-- `scientific_paper_professional.html` - Paper acadêmico
-- `decadimensional_model.md` - Submodelo dimensional
-- `philosophical_paper_academic.md` - Análise filosófica
+### **1. Complete Documentation:**
+- `README.md` - Overview and theory
+- `scientific_paper_professional.html` - Academic paper
+- `decadimensional_model.md` - Dimensional submodel
+- `philosophical_paper_academic.md` - Philosophical analysis
 
-### **2. Exemplos de Código:**
+### **2. Code Examples:**
 ```python
-# Exemplo completo de uso
+# Complete usage example
 from o_v2 import ModelXv2, ModelXVisualizer
 
-# Inicializar
+# Initialize
 model = ModelXv2()
 visualizer = ModelXVisualizer()
 
-# Configurar simulação
+# Configure simulation
 time = np.linspace(0, 10, 200)
 energy = 1 + 0.3 * np.sin(time)
 
-# Executar
+# Execute
 qubit_data = model.simulate_qubit_decoherence(time, energy)
 bio_data = model.simulate_biological_system(time, 1.2, 0.9)
 
-# Visualizar
+# Visualize
 fig1 = model.create_interactive_plot(qubit_data, 'quantum')
 fig2 = model.create_interactive_plot(bio_data, 'biological')
 
-# Salvar
+# Save
 fig1.write_html("qubit_simulation.html")
 fig2.write_html("biological_simulation.html")
 
-# Validar
+# Validate
 validation = model.validate_model(qubit_data)
-print("Validação concluída:", validation)
+print("Validation completed:", validation)
 ```
 
 ---
 
-## 🤝 **Contribuindo**
+## 🤝 **Contributing**
 
-### **1. Reportar Bugs:**
-Abra uma issue descrevendo:
-- Sistema operacional
-- Versão do Python
-- Passos para reproduzir
-- Mensagem de erro
+### **1. Report Bugs:**
+Open an issue describing:
+- Operating system
+- Python version
+- Steps to reproduce
+- Error message
 
-### **2. Sugerir Melhorias:**
-- Novas funcionalidades
-- Otimizações de performance
-- Melhorias na documentação
-- Novas aplicações
+### **2. Suggest Improvements:**
+- New features
+- Performance optimizations
+- Documentation improvements
+- New applications
 
-### **3. Desenvolvimento:**
+### **3. Development:**
 ```bash
-# Fork o repositório
+# Fork the repository
 git clone https://github.com/tiagohanna123/o.git
 cd o
 
-# Criar branch para desenvolvimento
-git checkout -b feature/nova-funcionalidade
+# Create branch for development
+git checkout -b feature/new-feature
 
-# Fazer alterações e commit
+# Make changes and commit
 git add .
-git commit -m "Adiciona nova funcionalidade"
+git commit -m "Add new feature"
 
-# Push e pull request
-git push origin feature/nova-funcionalidade
+# Push and pull request
+git push origin feature/new-feature
 ```
 
 ---
 
-## 📄 **Licença**
+## 📄 **License**
 
-Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
-
----
-
-## 🙏 **Agradecimentos**
-
-- **Comunidade Científica**: Pelo feedback e validação
-- **Contribuidores**: Pelo código e documentação
-- **Beta Testers**: Pelo teste e reporte de bugs
-- **Revisores**: Pelas sugestões e melhorias
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-**🚀 Pronto para explorar o Modelo X v2.0!**
+## 🙏 **Acknowledgments**
 
-**Lembre-se**: Este framework é uma ferramenta poderosa para compreender e interagir com sistemas complexos. Use com responsabilidade e curiosidade científica!
+- **Scientific Community**: For feedback and validation
+- **Contributors**: For code and documentation
+- **Beta Testers**: For testing and bug reports
+- **Reviewers**: For suggestions and improvements
+
+---
+
+**🚀 Ready to explore Model X v2.0!**
+
+**Remember**: This framework is a powerful tool for understanding and interacting with complex systems. Use it responsibly and with scientific curiosity!

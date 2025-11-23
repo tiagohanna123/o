@@ -1,32 +1,32 @@
-# Quick Start Guide - Model X Framework v3.0
+# Guia de Início Rápido - Modelo X Framework v3.0
 
-This guide will help you start using the Model X Framework in minutes.
-
----
-
-## Prerequisites
-
-- Python 3.7 or higher
-- pip (package manager)
+Este guia ajudará você a começar a usar o Modelo X Framework em minutos.
 
 ---
 
-## Installation
+## Pré-requisitos
 
-### 1. Clone the repository
+- Python 3.7 ou superior
+- pip (gerenciador de pacotes)
+
+---
+
+## Instalação
+
+### 1. Clone o repositório
 
 ```bash
 git clone https://github.com/tiagohanna123/o.git
 cd o
 ```
 
-### 2. Install dependencies
+### 2. Instale as dependências
 
 ```bash
 pip install numpy scipy matplotlib
 ```
 
-### 3. Install the framework (development mode)
+### 3. Instale o framework (modo desenvolvimento)
 
 ```bash
 pip install -e .
@@ -34,136 +34,136 @@ pip install -e .
 
 ---
 
-## First Example
+## Primeiro Exemplo
 
-### Step 1: Import the module
+### Passo 1: Importar o módulo
 
 ```python
 from model_x import EnergyModulatedModel
 ```
 
-### Step 2: Create a model
+### Passo 2: Criar um modelo
 
 ```python
-# System with moderate organization
+# Sistema com organização moderada
 model = EnergyModulatedModel(
-    entropy=0.4,    # 40% disorder
-    syntropy=0.6,   # 60% organization
-    energy=1.0      # Unit energy
+    entropy=0.4,    # 40% desordem
+    syntropy=0.6,   # 60% organização
+    energy=1.0      # Energia unitária
 )
 ```
 
-### Step 3: Calculate metrics
+### Passo 3: Calcular métricas
 
 ```python
-# Temporal dilation
+# Dilatação temporal
 dilation = model.compute_temporal_dilation()
-print(f"Temporal dilation: {dilation:.4f}")
-# Output: Temporal dilation: 1.2000
+print(f"Dilatação temporal: {dilation:.4f}")
+# Saída: Dilatação temporal: 1.2000
 
-# Energy modulation
+# Modulação energética
 f_E, g_S = model.compute_modulation()
 print(f"f(E): {f_E:.4f}, g(S): {g_S:.4f}")
 ```
 
-### Step 4: Simulate evolution
+### Passo 4: Simular evolução
 
 ```python
-# Simulate 100 steps
+# Simular 100 passos
 trajectory = model.simulate(steps=100, dt=0.01)
 
-# View some points
+# Ver alguns pontos
 for point in trajectory[:5]:
     print(f"t={point['time']:.2f}: τ={point['dilation']:.4f}")
 ```
 
 ---
 
-## Real Data Analysis
+## Análise de Dados Reais
 
-### Calculate Data Entropy
+### Calcular Entropia de Dados
 
 ```python
 from model_x import EntropySyntropyCalculator
 import numpy as np
 
-# Create calculator
+# Criar calculadora
 calc = EntropySyntropyCalculator()
 
-# Your data
+# Seus dados
 data = [1.2, 3.4, 2.1, 4.5, 3.2, 2.8, 3.9, 4.1, 2.5, 3.7]
 
-# Calculate entropy and syntropy
+# Calcular entropia e sintropia
 entropy = calc.calculate_shannon_entropy(data)
 syntropy = calc.calculate_syntropy(data)
 
-print(f"Entropy: {entropy:.4f}")
-print(f"Syntropy: {syntropy:.4f}")
-print(f"Sum: {entropy + syntropy:.4f}")  # ~1.0
+print(f"Entropia: {entropy:.4f}")
+print(f"Sintropia: {syntropy:.4f}")
+print(f"Soma: {entropy + syntropy:.4f}")  # ~1.0
 ```
 
 ---
 
-## Advanced Simulation
+## Simulação Avançada
 
-### Using SimulationEngine
+### Usando SimulationEngine
 
 ```python
 from model_x import SimulationEngine
 
-# Configure simulation engine
+# Configurar motor de simulação
 engine = SimulationEngine(
-    dt=0.01,        # Time interval
-    max_steps=1000  # Maximum steps
+    dt=0.01,        # Intervalo de tempo
+    max_steps=1000  # Máximo de passos
 )
 
-# Initial state
+# Estado inicial
 initial_state = {
     'entropy': 0.3,
     'syntropy': 0.7,
     'energy': 2.0
 }
 
-# Run simulation
+# Executar simulação
 history = engine.run_simulation(initial_state, 'deterministic')
 
-# Statistics
+# Estatísticas
 stats = engine.get_statistics()
-print(f"Steps: {stats['total_steps']}")
-print(f"Mean dilation: {stats['mean_dilation']:.4f}")
-print(f"Standard deviation: {stats['std_dilation']:.4f}")
+print(f"Passos: {stats['total_steps']}")
+print(f"Dilatação média: {stats['mean_dilation']:.4f}")
+print(f"Desvio padrão: {stats['std_dilation']:.4f}")
 ```
 
 ---
 
-## Validation
+## Validação
 
-### Run Complete Validation
+### Executar Validação Completa
 
 ```python
 from model_x import ValidationUtils, EntropySyntropyCalculator, SimulationEngine
 
-# Create components
+# Criar componentes
 utils = ValidationUtils()
 calc = EntropySyntropyCalculator()
 engine = SimulationEngine(max_steps=50)
 
-# Load validation datasets
+# Carregar datasets de validação
 datasets = utils.create_default_datasets()
 
-# Validate each domain
+# Validar cada domínio
 for name, dataset in datasets.items():
     data = dataset['data']
 
-    # Calculate metrics
+    # Calcular métricas
     entropy = calc.calculate_shannon_entropy(data)
     syntropy = calc.calculate_syntropy(data)
 
-    # Simulate
+    # Simular
     state = {'entropy': entropy, 'syntropy': syntropy, 'energy': 1.0}
     history = engine.run_simulation(state, 'deterministic')
 
-    # Validation metrics
+    # Métricas de validação
     results = {
         'final_state': history[-1]['state'],
         'statistics': engine.get_statistics(),
@@ -176,50 +176,50 @@ for name, dataset in datasets.items():
 
 ---
 
-## Visualization
+## Visualização
 
-### ASCII Plot
+### Gráfico ASCII
 
 ```python
 from model_x import ModelXVisualizer
 
 viz = ModelXVisualizer()
 
-# Sample data
+# Dados de exemplo
 data = [1, 2, 3, 4, 5, 4, 3, 2, 1, 2, 3, 4]
 
-# Create ASCII plot
-plot = viz.ascii_plot(data, title="My Data", width=40, height=10)
+# Criar gráfico ASCII
+plot = viz.ascii_plot(data, title="Meus Dados", width=40, height=10)
 print(plot)
 ```
 
-### Export to JSON
+### Exportar para JSON
 
 ```python
-# Export simulation
-viz.export_simulation_data(history, 'my_simulation.json')
+# Exportar simulação
+viz.export_simulation_data(history, 'minha_simulacao.json')
 ```
 
 ---
 
-## Next Steps
+## Próximos Passos
 
-1. Read the [Mathematical Documentation](./MATHEMATICAL_FOUNDATIONS.md)
-2. Explore the [API Reference](./api-reference.md)
-3. See the [Examples](../examples/)
-4. Run the [Tests](../tests/)
+1. Leia a [Documentação Matemática](./MATHEMATICAL_FOUNDATIONS.md)
+2. Explore a [Referência da API](./api-reference.md)
+3. Veja os [Exemplos](../examples/)
+4. Execute os [Testes](../tests/)
 
 ---
 
-## Troubleshooting
+## Resolução de Problemas
 
 ### ImportError: No module named 'model_x'
 
 ```bash
-# Make sure you're in the correct directory
-cd /path/to/o
+# Certifique-se de estar no diretório correto
+cd /caminho/para/o
 
-# Install in development mode
+# Instale em modo desenvolvimento
 pip install -e .
 ```
 
@@ -231,12 +231,12 @@ pip install numpy scipy matplotlib
 
 ---
 
-## Contact
+## Contato
 
-Questions? Get in touch:
+Dúvidas? Entre em contato:
 - GitHub: [@tiagohanna123](https://github.com/tiagohanna123)
 - Email: hanna@mkbl.com.br
 
 ---
 
-**v3.0.0 - November 2025**
+**v3.0.0 - Novembro 2025**
