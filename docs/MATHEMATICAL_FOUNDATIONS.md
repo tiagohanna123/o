@@ -1,124 +1,124 @@
-# Fundamentos Matemáticos do Modelo X Framework
+# Mathematical Foundations of Model X Framework
 
-**Versão 3.0.0 - Teoria Hiperdimensional de Complexidade Universal**
-
----
-
-## Índice
-
-1. [Introdução](#1-introdução)
-2. [Axiomas Fundamentais](#2-axiomas-fundamentais)
-3. [Entropia de Shannon](#3-entropia-de-shannon)
-4. [Sintropia como Complemento](#4-sintropia-como-complemento)
-5. [Modulação Energética](#5-modulação-energética)
-6. [Dilatação Temporal](#6-dilatação-temporal)
-7. [Lei de Conservação](#7-lei-de-conservação)
-8. [Modelo Decadimensional](#8-modelo-decadimensional)
-9. [Validação Estatística](#9-validação-estatística)
-10. [Aplicações](#10-aplicações)
+**Version 3.0.0 - Hyperdimensional Theory of Universal Complexity**
 
 ---
 
-## 1. Introdução
+## Table of Contents
 
-O Modelo X Framework propõe uma metateoria matemática que unifica conceitos de termodinâmica, teoria da informação e física através de três variáveis fundamentais:
-
-- **Entropia (E)**: Quantificação da desordem/aleatoriedade
-- **Sintropia (S)**: Quantificação da organização/estrutura
-- **Energia (ℰ)**: Capacidade de realizar trabalho e modular o sistema
-
-A hipótese central é que todo sistema complexo pode ser descrito pela interação dinâmica dessas três variáveis, seguindo leis de conservação análogas às da termodinâmica.
+1. [Introduction](#1-introduction)
+2. [Fundamental Axioms](#2-fundamental-axioms)
+3. [Shannon Entropy](#3-shannon-entropy)
+4. [Syntropy as Complement](#4-syntropy-as-complement)
+5. [Energy Modulation](#5-energy-modulation)
+6. [Temporal Dilation](#6-temporal-dilation)
+7. [Conservation Law](#7-conservation-law)
+8. [Decadimensional Model](#8-decadimensional-model)
+9. [Statistical Validation](#9-statistical-validation)
+10. [Applications](#10-applications)
 
 ---
 
-## 2. Axiomas Fundamentais
+## 1. Introduction
 
-### Axioma 1: Dualidade Entropia-Sintropia
+The Model X Framework proposes a mathematical metatheory that unifies concepts from thermodynamics, information theory, and physics through three fundamental variables:
+
+- **Entropy (E)**: Quantification of disorder/randomness
+- **Syntropy (S)**: Quantification of organization/structure
+- **Energy (ℰ)**: Capacity to perform work and modulate the system
+
+The central hypothesis is that every complex system can be described by the dynamic interaction of these three variables, following conservation laws analogous to those in thermodynamics.
+
+---
+
+## 2. Fundamental Axioms
+
+### Axiom 1: Entropy-Syntropy Duality
 ```
-∀ sistema S: E(S) + S(S) = 1 (normalizado)
+∀ system S: E(S) + S(S) = 1 (normalized)
 ```
-Todo sistema possui um balanço entre entropia e sintropia que soma 1 quando normalizado.
+Every system possesses a balance between entropy and syntropy that sums to 1 when normalized.
 
-### Axioma 2: Conservação Energética
+### Axiom 2: Energy Conservation
 ```
 Φ(E, S, ℰ) = E × f(ℰ) + S × g(ℰ) = C
 ```
-A função de estado Φ permanece constante para sistemas isolados.
+The state function Φ remains constant for isolated systems.
 
-### Axioma 3: Modulação Temporal
+### Axiom 3: Temporal Modulation
 ```
 τ = τ₀ × Γ(E, S, ℰ)
 ```
-O tempo experimentado por um sistema é modulado pelo estado entropia-sintropia-energia.
+The time experienced by a system is modulated by the entropy-syntropy-energy state.
 
-### Axioma 4: Irreversibilidade
+### Axiom 4: Irreversibility
 ```
-dE/dt ≥ 0 (em sistemas isolados)
+dE/dt ≥ 0 (in isolated systems)
 ```
-A entropia tende a aumentar em sistemas isolados (Segunda Lei da Termodinâmica).
+Entropy tends to increase in isolated systems (Second Law of Thermodynamics).
 
 ---
 
-## 3. Entropia de Shannon
+## 3. Shannon Entropy
 
-### Definição Clássica
+### Classical Definition
 
-A entropia de Shannon mede a incerteza média de uma variável aleatória:
+Shannon entropy measures the average uncertainty of a random variable:
 
 ```
 H(X) = -Σᵢ p(xᵢ) × log₂(p(xᵢ))
 ```
 
-Onde:
-- `p(xᵢ)` é a probabilidade do evento `xᵢ`
-- O logaritmo na base 2 resulta em bits
+Where:
+- `p(xᵢ)` is the probability of event `xᵢ`
+- The logarithm in base 2 results in bits
 
-### Normalização
+### Normalization
 
-Para obter valores no intervalo [0, 1]:
+To obtain values in the interval [0, 1]:
 
 ```
 H_norm(X) = H(X) / log₂(N)
 ```
 
-Onde `N` é o número de estados possíveis (bins de discretização).
+Where `N` is the number of possible states (discretization bins).
 
-### Propriedades
+### Properties
 
-| Propriedade | Valor |
-|-------------|-------|
-| Mínimo | 0 (determinístico) |
-| Máximo | 1 (uniforme) |
-| Concavidade | Côncava |
-| Aditividade | H(X,Y) = H(X) + H(Y|X) |
+| Property | Value |
+|----------|-------|
+| Minimum | 0 (deterministic) |
+| Maximum | 1 (uniform) |
+| Concavity | Concave |
+| Additivity | H(X,Y) = H(X) + H(Y|X) |
 
-### Implementação
+### Implementation
 
 ```python
 def calculate_shannon_entropy(data, bins=10):
     """
-    Calcula entropia de Shannon normalizada.
+    Calculates normalized Shannon entropy.
 
     Args:
-        data: Sequência numérica
-        bins: Número de bins para discretização
+        data: Numerical sequence
+        bins: Number of bins for discretization
 
     Returns:
-        float: Entropia normalizada [0, 1]
+        float: Normalized entropy [0, 1]
     """
-    # Discretização em bins
+    # Discretization into bins
     hist, _ = np.histogram(data, bins=bins, density=True)
 
-    # Normalizar para probabilidades
+    # Normalize to probabilities
     hist = hist / hist.sum()
 
-    # Remover zeros (log indefinido)
+    # Remove zeros (undefined log)
     hist = hist[hist > 0]
 
-    # Calcular entropia
+    # Calculate entropy
     entropy = -np.sum(hist * np.log2(hist))
 
-    # Normalizar pelo máximo teórico
+    # Normalize by theoretical maximum
     max_entropy = np.log2(bins)
 
     return entropy / max_entropy
@@ -126,74 +126,74 @@ def calculate_shannon_entropy(data, bins=10):
 
 ---
 
-## 4. Sintropia como Complemento
+## 4. Syntropy as Complement
 
-### Conceito de Sintropia
+### Concept of Syntropy
 
-Sintropia (ou negentropia) representa a tendência à organização e ordem em sistemas complexos. No framework:
+Syntropy (or negentropy) represents the tendency toward organization and order in complex systems. In the framework:
 
 ```
 S = 1 - E
 ```
 
-### Interpretação Física
+### Physical Interpretation
 
-| Alta Sintropia (S → 1) | Baixa Sintropia (S → 0) |
-|------------------------|-------------------------|
-| Sistema organizado | Sistema caótico |
-| Baixa aleatoriedade | Alta aleatoriedade |
-| Padrões detectáveis | Ruído dominante |
-| Informação estruturada | Informação dispersa |
+| High Syntropy (S → 1) | Low Syntropy (S → 0) |
+|-----------------------|----------------------|
+| Organized system | Chaotic system |
+| Low randomness | High randomness |
+| Detectable patterns | Dominant noise |
+| Structured information | Dispersed information |
 
-### Métodos de Cálculo
+### Calculation Methods
 
-#### Método Complemento (padrão)
+#### Complement Method (default)
 ```python
 syntropy = 1.0 - entropy
 ```
 
-#### Método Negentropy (alternativo)
+#### Negentropy Method (alternative)
 ```
 S = H_max - H(X)
 ```
 
-#### Método Autocorrelação (experimental)
+#### Autocorrelation Method (experimental)
 ```
 S = |ACF(X, lag=1)|
 ```
 
 ---
 
-## 5. Modulação Energética
+## 5. Energy Modulation
 
-### Equação de Modulação
+### Modulation Equation
 
-A energia modula tanto a componente entrópica quanto sintrópica:
+Energy modulates both the entropic and syntropic components:
 
 ```
 Φ(E, S, ℰ) = E × f(ℰ) + S × g(ℰ)
 ```
 
-### Funções de Modulação
+### Modulation Functions
 
-#### Função Entrópica f(ℰ)
+#### Entropic Function f(ℰ)
 ```
 f(ℰ) = 1 + α × (E / ℰ)
 ```
-- α = 0.3 (coeficiente de modulação entrópica)
-- Amplifica efeitos entrópicos em baixas energias
+- α = 0.3 (entropic modulation coefficient)
+- Amplifies entropic effects at low energies
 
-#### Função Sintrópica g(ℰ)
+#### Syntropic Function g(ℰ)
 ```
 g(ℰ) = 1 + β × (S / ℰ)^γ
 ```
-- β = 0.7 (coeficiente de modulação sintrópica)
-- γ = 1.5 (expoente não-linear)
-- Comportamento não-linear favorece organização
+- β = 0.7 (syntropic modulation coefficient)
+- γ = 1.5 (non-linear exponent)
+- Non-linear behavior favors organization
 
-### Modos de Modulação
+### Modulation Modes
 
-#### Adaptativo
+#### Adaptive
 ```python
 def adaptive_modulation(E, S, energy):
     balance = S - E
@@ -207,7 +207,7 @@ def adaptive_modulation(E, S, energy):
     return f_E * energy, g_S * energy
 ```
 
-#### Conservativo
+#### Conservative
 ```python
 def conservative_modulation(E, S, energy):
     damping = 0.95
@@ -216,88 +216,88 @@ def conservative_modulation(E, S, energy):
 
 ---
 
-## 6. Dilatação Temporal
+## 6. Temporal Dilation
 
-### Conceito
+### Concept
 
-Analogamente à relatividade, o tempo experimentado por um sistema é afetado pelo seu estado interno:
+Analogously to relativity, the time experienced by a system is affected by its internal state:
 
 ```
 τ = τ₀ × (1 + balance / ℰ)
 ```
 
-Onde:
-- `τ` = tempo dilatado
-- `τ₀` = tempo próprio (referência)
-- `balance = S - E` = balanço entropia-sintropia
-- `ℰ` = energia do sistema
+Where:
+- `τ` = dilated time
+- `τ₀` = proper time (reference)
+- `balance = S - E` = entropy-syntropy balance
+- `ℰ` = system energy
 
-### Interpretação
+### Interpretation
 
-| Condição | Balanço | Dilatação | Efeito |
-|----------|---------|-----------|--------|
-| Organização dominante | S > E | τ > τ₀ | Tempo "esticado" |
-| Equilíbrio | S = E | τ = τ₀ | Tempo normal |
-| Desordem dominante | S < E | τ < τ₀ | Tempo "comprimido" |
+| Condition | Balance | Dilation | Effect |
+|-----------|---------|----------|--------|
+| Dominant organization | S > E | τ > τ₀ | Time "stretched" |
+| Equilibrium | S = E | τ = τ₀ | Normal time |
+| Dominant disorder | S < E | τ < τ₀ | Time "compressed" |
 
-### Limites
+### Limits
 
 ```
-Para ℰ → 0: τ → ∞ (singularidade)
-Para ℰ → ∞: τ → τ₀ (regime clássico)
+For ℰ → 0: τ → ∞ (singularity)
+For ℰ → ∞: τ → τ₀ (classical regime)
 ```
 
 ---
 
-## 7. Lei de Conservação
+## 7. Conservation Law
 
-### Formulação Completa
+### Complete Formulation
 
-Em um sistema fechado, a soma das componentes entrópicas e sintrópicas (positivas e negativas) mais um termo de neutralização é constante:
+In a closed system, the sum of entropic and syntropic components (positive and negative) plus a neutralization term is constant:
 
 ```
 E(+) + E(-) + S(+) + S(-) + N = C
 ```
 
-Onde:
-- `E(+)` = entropia positiva (desordem crescente)
-- `E(-)` = entropia negativa (organização espontânea)
-- `S(+)` = sintropia positiva (estruturação ativa)
-- `S(-)` = sintropia negativa (desestruturação)
-- `N` = termo de neutralização
-- `C` = constante de conservação
+Where:
+- `E(+)` = positive entropy (increasing disorder)
+- `E(-)` = negative entropy (spontaneous organization)
+- `S(+)` = positive syntropy (active structuring)
+- `S(-)` = negative syntropy (destructuring)
+- `N` = neutralization term
+- `C` = conservation constant
 
-### Analogia Termodinâmica
+### Thermodynamic Analogy
 
-| Termodinâmica | Modelo X |
-|---------------|----------|
-| Energia interna U | Energia ℰ |
-| Entropia S | Entropia E |
-| Entalpia H | Sintropia S |
-| Energia livre G | Balanço (S - E) |
+| Thermodynamics | Model X |
+|----------------|---------|
+| Internal energy U | Energy ℰ |
+| Entropy S | Entropy E |
+| Enthalpy H | Syntropy S |
+| Free energy G | Balance (S - E) |
 
 ---
 
-## 8. Modelo Decadimensional
+## 8. Decadimensional Model
 
-### Estrutura de 10 Dimensões
+### Structure of 10 Dimensions
 
-O modelo completo propõe 10 dimensões de análise:
+The complete model proposes 10 dimensions of analysis:
 
-| Dim | Nome | Descrição | Domínio |
-|-----|------|-----------|---------|
-| 1 | Espacial X | Posição horizontal | ℝ |
-| 2 | Espacial Y | Posição vertical | ℝ |
-| 3 | Espacial Z | Profundidade | ℝ |
-| 4 | Temporal | Tempo próprio τ | ℝ⁺ |
-| 5 | Entrópica | Nível de desordem E | [0, 1] |
-| 6 | Sintrópica | Nível de ordem S | [0, 1] |
-| 7 | Energética | Capacidade ℰ | ℝ⁺ |
-| 8 | Informacional | Conteúdo I | ℝ⁺ |
-| 9 | Complexidade | Medida K | ℝ⁺ |
-| 10 | Consciência | Integração Φ | ℝ⁺ |
+| Dim | Name | Description | Domain |
+|-----|------|-------------|--------|
+| 1 | Spatial X | Horizontal position | ℝ |
+| 2 | Spatial Y | Vertical position | ℝ |
+| 3 | Spatial Z | Depth | ℝ |
+| 4 | Temporal | Proper time τ | ℝ⁺ |
+| 5 | Entropic | Disorder level E | [0, 1] |
+| 6 | Syntropic | Order level S | [0, 1] |
+| 7 | Energetic | Capacity ℰ | ℝ⁺ |
+| 8 | Informational | Content I | ℝ⁺ |
+| 9 | Complexity | Measure K | ℝ⁺ |
+| 10 | Consciousness | Integration Φ | ℝ⁺ |
 
-### Métrica
+### Metric
 
 ```
 ds² = -c²dt² + dx² + dy² + dz² + α(dE² + dS²) + β(dℰ²) + γ(dI² + dK² + dΦ²)
@@ -305,130 +305,130 @@ ds² = -c²dt² + dx² + dy² + dz² + α(dE² + dS²) + β(dℰ²) + γ(dI² + 
 
 ---
 
-## 9. Validação Estatística
+## 9. Statistical Validation
 
-### Testes Realizados
+### Tests Performed
 
-| Teste | Estatística | p-valor | Interpretação |
-|-------|-------------|---------|---------------|
-| Shapiro-Wilk | W = 0.947 | p = 0.234 | Distribuição normal |
-| t-Student | t = 15.67 | p < 0.001 | Significativo |
-| ANOVA | F = 42.89 | p < 0.001 | Diferenças significativas |
-| Correlação | r = -0.997 | p < 0.001 | Forte correlação negativa |
+| Test | Statistic | p-value | Interpretation |
+|------|-----------|---------|----------------|
+| Shapiro-Wilk | W = 0.947 | p = 0.234 | Normal distribution |
+| t-Student | t = 15.67 | p < 0.001 | Significant |
+| ANOVA | F = 42.89 | p < 0.001 | Significant differences |
+| Correlation | r = -0.997 | p < 0.001 | Strong negative correlation |
 
-### Métricas de Ajuste
+### Goodness-of-Fit Metrics
 
 ```
-R² = 0.896 (excelente)
-R² cross-validation = 0.871 (robusto)
-RMSE = 0.042 (baixo erro)
-MAE = 0.031 (baixo erro absoluto)
+R² = 0.896 (excellent)
+R² cross-validation = 0.871 (robust)
+RMSE = 0.042 (low error)
+MAE = 0.031 (low absolute error)
 ```
 
-### Validação por Domínio
+### Validation by Domain
 
-| Domínio | N amostras | Score | IC 95% |
-|---------|------------|-------|--------|
-| Finanças | 100 | 100.0 | [98.2, 100.0] |
-| Biologia | 100 | 82.8 | [79.4, 86.2] |
-| Física | 100 | 91.1 | [88.3, 93.9] |
-| Redes | 100 | 98.2 | [96.1, 100.0] |
+| Domain | N samples | Score | 95% CI |
+|--------|-----------|-------|--------|
+| Finance | 100 | 100.0 | [98.2, 100.0] |
+| Biology | 100 | 82.8 | [79.4, 86.2] |
+| Physics | 100 | 91.1 | [88.3, 93.9] |
+| Networks | 100 | 98.2 | [96.1, 100.0] |
 
 ---
 
-## 10. Aplicações
+## 10. Applications
 
-### 10.1 Finanças
+### 10.1 Finance
 
-Análise de volatilidade e risco:
+Volatility and risk analysis:
 ```python
-# Série temporal de preços
+# Time series of prices
 returns = np.diff(np.log(prices))
 entropy = calculator.calculate_shannon_entropy(returns)
-# Alta entropia → Mercado volátil/imprevisível
+# High entropy → Volatile/unpredictable market
 ```
 
-### 10.2 Biologia
+### 10.2 Biology
 
-Análise de sinais fisiológicos:
+Physiological signal analysis:
 ```python
-# ECG ou EEG
+# ECG or EEG
 entropy = calculator.calculate_shannon_entropy(signal)
-# Baixa entropia → Ritmo regular/saudável
-# Alta entropia → Arritmia/patologia
+# Low entropy → Regular/healthy rhythm
+# High entropy → Arrhythmia/pathology
 ```
 
-### 10.3 Física
+### 10.3 Physics
 
-Sistemas oscilatórios:
+Oscillatory systems:
 ```python
-# Oscilador harmônico
+# Harmonic oscillator
 entropy = calculator.calculate_shannon_entropy(oscillations)
-# Entropia moderada → Presença de harmônicos
+# Moderate entropy → Presence of harmonics
 ```
 
-### 10.4 Redes
+### 10.4 Networks
 
-Análise de tráfego:
+Traffic analysis:
 ```python
-# Pacotes por segundo
+# Packets per second
 entropy = calculator.calculate_shannon_entropy(traffic)
-# Alta entropia → Tráfego aleatório (normal)
-# Baixa entropia → Padrão de ataque/anomalia
+# High entropy → Random traffic (normal)
+# Low entropy → Attack/anomaly pattern
 ```
 
 ---
 
-## Referências
+## References
 
 1. Shannon, C.E. (1948). "A Mathematical Theory of Communication"
 2. Jaynes, E.T. (1957). "Information Theory and Statistical Mechanics"
 3. Prigogine, I. (1977). "Self-Organization in Non-Equilibrium Systems"
-4. Schrödinger, E. (1944). "What is Life?" (conceito de negentropia)
+4. Schrödinger, E. (1944). "What is Life?" (negentropy concept)
 5. Tononi, G. (2008). "Consciousness as Integrated Information"
 
 ---
 
-## Apêndice A: Constantes do Framework
+## Appendix A: Framework Constants
 
-| Constante | Símbolo | Valor | Descrição |
-|-----------|---------|-------|-----------|
-| Coef. entrópico | α | 0.3 | Peso da modulação entrópica |
-| Coef. sintrópico | β | 0.7 | Peso da modulação sintrópica |
-| Expoente não-linear | γ | 1.5 | Curvatura da função sintrópica |
-| Conservação | C | 1.0 | Constante de conservação normalizada |
-| Bins padrão | N | 10 | Discretização para entropia |
+| Constant | Symbol | Value | Description |
+|----------|--------|-------|-------------|
+| Entropic coef. | α | 0.3 | Weight of entropic modulation |
+| Syntropic coef. | β | 0.7 | Weight of syntropic modulation |
+| Non-linear exp. | γ | 1.5 | Curvature of syntropic function |
+| Conservation | C | 1.0 | Normalized conservation constant |
+| Default bins | N | 10 | Discretization for entropy |
 
 ---
 
-## Apêndice B: Derivações
+## Appendix B: Derivations
 
-### B.1 Derivação da Dilatação Temporal
+### B.1 Temporal Dilation Derivation
 
-Partindo da equação de conservação:
+Starting from the conservation equation:
 ```
 Φ = E × f(ℰ) + S × g(ℰ) = C
 ```
 
-E assumindo que o tempo é modulado pelo balanço:
+And assuming that time is modulated by the balance:
 ```
 dτ/dt = 1 + (S - E) / ℰ
 ```
 
-Integrando:
+Integrating:
 ```
 τ = τ₀ × (1 + (S - E) / ℰ)
 ```
 
-### B.2 Condições de Contorno
+### B.2 Boundary Conditions
 
-Para sistemas físicos válidos:
+For valid physical systems:
 - 0 ≤ E ≤ 1
 - 0 ≤ S ≤ 1
-- E + S ≤ 1 (se normalizados conjuntamente)
-- ℰ > 0 (energia sempre positiva)
+- E + S ≤ 1 (if normalized jointly)
+- ℰ > 0 (energy always positive)
 
 ---
 
-**Documento preparado para Modelo X Framework v3.0.0**
-**Novembro 2025**
+**Document prepared for Model X Framework v3.0.0**
+**November 2025**
