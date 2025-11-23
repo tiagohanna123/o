@@ -310,6 +310,12 @@ If you use this framework in academic research:
 }
 ```
 
+### Zenodo Archive
+
+This repository is archived on Zenodo for permanent citation and preservation:
+
+📦 **[View on Zenodo](./zenodo-record.html)** → https://zenodo.org/records/17652550
+
 ---
 
 ## License
