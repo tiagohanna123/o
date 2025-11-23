@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Setup script for Modelo X Framework v2.0
+Setup script for Modelo X Framework v3.0
 Hyperdimensional Theory of Universal Complexity
+Framework for Entropy-Syntropy-Energy Analysis
 """
 
 from setuptools import setup, find_packages
@@ -17,7 +18,7 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 
 setup(
     name="modelo-x-framework",
-    version="2.0.0",
+    version="3.0.0",
     author="Tiago Hanna",
     author_email="tiago@example.com",  # Update with real email
     description="A hyperdimensional framework for universal complexity analysis",
