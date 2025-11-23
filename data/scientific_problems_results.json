@@ -1,0 +1,408 @@
+{
+  "metadata": {
+    "framework": "Modelo X Framework v2.0",
+    "analysis_date": "2025-11-23T18:21:58.741611",
+    "problems_analyzed": 10,
+    "status": "COMPLETE"
+  },
+  "parameters": {
+    "alpha": 0.3,
+    "beta": 0.7,
+    "gamma": 1.2,
+    "E0": 1.0,
+    "C_universal": 1.0
+  },
+  "results": [
+    {
+      "problem": "Matéria Escura e Energia Escura",
+      "initial_state": {
+        "entropy": 0.95,
+        "syntropy": 0.05,
+        "energy": 2.7,
+        "time": 0.0
+      },
+      "final_state": {
+        "step": 99,
+        "time": 0.99,
+        "entropy": 0.9501000000000028,
+        "syntropy": 0.04989999999999717,
+        "energy": 2.697301336063529,
+        "phi": 1.3978255650419276,
+        "dilation": 0.26919067333912494
+      },
+      "metrics": {
+        "dark_matter_component": 0.3746172514312366,
+        "dark_energy_component": 0.9547148609236366,
+        "baryonic_component": 0.06849345268705445,
+        "total_phi": 1.3978255650419276,
+        "predicted_dm_ratio": 0.268,
+        "predicted_de_ratio": 0.683
+      },
+      "predictions": [
+        "Matéria escura é campo sintrópico negativo S(-)",
+        "Energia escura é entropia negativa cósmica E(-)",
+        "Razão S(-)/E(-) predita: 0.392",
+        "Buscar padrões de interferência sintrópica em lentes gravitacionais"
+      ],
+      "solutions": [
+        "Mapear distribuição de S(-) via lensing gravitacional",
+        "Detectar flutuações de E(-) no CMB",
+        "Correlacionar estrutura cósmica com gradientes de sintropia"
+      ],
+      "trajectory_length": 100
+    },
+    {
+      "problem": "Teoria Quântica da Gravidade",
+      "initial_state": {
+        "entropy": 0.5,
+        "syntropy": 0.5,
+        "energy": 1.0
+      },
+      "final_state": {
+        "step": 99,
+        "time": 0.99,
+        "entropy": 0.481162844141206,
+        "syntropy": 0.518837155858794,
+        "energy": 1.0992114701314477,
+        "phi": 1.420628441614664,
+        "curvature": 0.32911272821583587,
+        "dilation": 1.1406235057007277
+      },
+      "metrics": {
+        "mean_phi": 1.3499844550314508,
+        "curvature_variance": 0.049724999999999984,
+        "unification_index": 0.9526304508323609,
+        "quantum_classical_ratio": 1.0523294815135982
+      },
+      "predictions": [
+        "Gravidade não requer gravitons como partículas fundamentais",
+        "Curvatura emerge de acumulação estatística de flutuações S/E",
+        "Renormalização natural: S + E ≤ 1 elimina infinitos",
+        "Índice de unificação: 0.9526"
+      ],
+      "solutions": [
+        "Formular teoria de campos com restrição S + E ≤ 1",
+        "Buscar assinaturas de flutuações S/E em detectores de ondas gravitacionais",
+        "Testar colapso quântico como transição para S-dominante"
+      ],
+      "trajectory_length": 100
+    },
+    {
+      "problem": "Origem da Vida",
+      "initial_state": {
+        "entropy": 0.95,
+        "syntropy": 0.05,
+        "energy": 1.0,
+        "time": 0.0
+      },
+      "final_state": {
+        "step": 99,
+        "time": 0.99,
+        "entropy": 0.95,
+        "syntropy": 0.05,
+        "energy": 1.0595485111744312,
+        "phi": 1.0542697781416317,
+        "life_probability": 0.01098694263059318,
+        "dilation": 0.10595485111744321
+      },
+      "metrics": {
+        "life_emerged": false,
+        "emergence_step": null,
+        "final_syntropy": 0.05,
+        "final_entropy": 0.95,
+        "transition_energy": 1.2,
+        "life_probability": 0.01098694263059318
+      },
+      "predictions": [
+        "Vida emerge quando S > 0.5: NÃO",
+        "Energia crítica de transição: ℰ > 1.2 ℰ₀",
+        "Água líquida necessária como meio de flutuações S/E",
+        "Ciclos dia/noite facilitam oscilações f(ℰ)/g(ℰ)"
+      ],
+      "solutions": [
+        "Recriar condições prebióticas em laboratório",
+        "Buscar transições sintrópicas em exoplanetas",
+        "Identificar biomarcadores baseados em razão S/E"
+      ],
+      "trajectory_length": 100
+    },
+    {
+      "problem": "Consciência",
+      "initial_state": {
+        "entropy": 0.6,
+        "syntropy": 0.4,
+        "state": "sono_profundo"
+      },
+      "final_state": {
+        "step": 99,
+        "time": 0.99,
+        "state_name": "meditacao",
+        "entropy": 0.05062821518156257,
+        "syntropy": 0.9493717848184374,
+        "energy": 18.0,
+        "phi": 22.36754236474976,
+        "consciousness_level": 1.4572900156946809,
+        "temporal_dilation": 34.17738425346375
+      },
+      "metrics": {
+        "max_consciousness": 1.4572900156946809,
+        "min_consciousness": 0.2260415197554159,
+        "mean_consciousness": 0.9126638735292457,
+        "consciousness_range": 1.2312484959392649,
+        "states_analyzed": 5
+      },
+      "predictions": [
+        "Consciência é propriedade fundamental da sintropia, não emergente",
+        "Φ_c máximo: 1.457 (meditação profunda)",
+        "Φ_c mínimo: 0.226 (sono profundo)",
+        "Qualia = gradientes de sintropia no espaço neural",
+        "Tempo subjetivo varia com S: τ/τ₀ = ℰ(1 + S - E)"
+      ],
+      "solutions": [
+        "Medir correlação entre S neural e relatos subjetivos",
+        "Mapear gradientes de sintropia via neuroimagem",
+        "Desenvolver índice de consciência baseado em S²×g(ℰ)"
+      ],
+      "trajectory_length": 100
+    },
+    {
+      "problem": "Mudanças Climáticas",
+      "initial_state": {
+        "entropy": 0.58,
+        "syntropy": 0.42,
+        "energy": 1.12
+      },
+      "final_state": {
+        "step": 99,
+        "time": 0.99,
+        "entropy": 0.5801210099999999,
+        "syntropy": 0.41987899000000006,
+        "energy": 1.121999999999991,
+        "phi": 1.3576420985339013,
+        "temperature_anomaly": 1.2003630299999999,
+        "tipping_risk": 0.19820044152079372,
+        "dilation": 0.9422084535599925
+      },
+      "metrics": {
+        "tipping_occurred": false,
+        "tipping_step": null,
+        "final_entropy": 0.5801210099999999,
+        "final_temperature_anomaly": 1.2003630299999999,
+        "safe_entropy_limit": 0.55,
+        "current_risk": 0.19820044152079372
+      },
+      "predictions": [
+        "Tipping point em E > 0.65: Não ocorreu",
+        "Temperatura final: +1.2°C",
+        "Meta segura: reduzir E de 0.58 → 0.50 até 2050",
+        "Necessário: -50% emissões até 2030, net-zero até 2050"
+      ],
+      "solutions": [
+        "Aumentar Sintropia: reflorestamento, restauração ecológica",
+        "Reduzir Entropia: transição energética, economia circular",
+        "Modular Energia: reduzir emissões, aumentar albedo"
+      ],
+      "trajectory_length": 100
+    },
+    {
+      "problem": "Envelhecimento e Longevidade",
+      "initial_state": {
+        "entropy": 0.2,
+        "syntropy": 0.8,
+        "age": 0
+      },
+      "final_state": {
+        "step": 99,
+        "chronological_age": 79.2,
+        "entropy": 0.8399999999999985,
+        "syntropy": 0.05,
+        "energy": 0.9607817508172768,
+        "es_ratio": 16.79999999999997,
+        "biological_age": 70.87707364127353,
+        "phi": 0.9135394956853327,
+        "vitality": 0.04803908754086384
+      },
+      "metrics": {
+        "final_entropy": 0.8399999999999985,
+        "final_syntropy": 0.05,
+        "final_es_ratio": 16.79999999999997,
+        "biological_vs_chronological": -9.122926358726474,
+        "vitality_decline": 0.9393203145641289
+      },
+      "predictions": [
+        "E/S inicial (jovem): 0.26",
+        "E/S final (80 anos): 16.80",
+        "Morte ocorre quando E/S → ∞ (S → 0)",
+        "Intervenções devem focar em manter S alto e E baixo"
+      ],
+      "solutions": [
+        "Senolíticos: remover células com E alto",
+        "Reprogramação celular: resetar S/E",
+        "Restrição calórica: reduzir dE/dt",
+        "Exercício: aumentar ℰ disponível"
+      ],
+      "trajectory_length": 100
+    },
+    {
+      "problem": "Câncer",
+      "initial_state": {
+        "entropy": 0.25,
+        "syntropy": 0.75,
+        "stage": "normal"
+      },
+      "final_state": {
+        "step": 99,
+        "time": 0.99,
+        "stage": "metastatico",
+        "mutations": 8,
+        "entropy": 0.8506282151815625,
+        "syntropy": 0.14937178481843744,
+        "energy": 0.7448115354455312,
+        "phi": 0.9985790650274017,
+        "malignancy_score": 5.694704767808108,
+        "warburg_ratio": 0.25518846455446875
+      },
+      "metrics": {
+        "final_stage": "metastatico",
+        "total_mutations": 8,
+        "final_malignancy": 5.694704767808108,
+        "warburg_effect": 0.25518846455446875,
+        "entropy_increase": 0.6006282151815625,
+        "syntropy_loss": 0.6006282151815625
+      },
+      "predictions": [
+        "Câncer = reversão para estado E-alto, S-baixo",
+        "Efeito Warburg: fermentação permite S baixo",
+        "Malignidade final: 5.69",
+        "Cura requer restaurar S/E para níveis normais"
+      ],
+      "solutions": [
+        "Inibir fermentação (forçar respiração)",
+        "Induzir diferenciação (aumentar S)",
+        "Imunoterapia (usar S imune contra E tumoral)",
+        "Senolíticos tumorais (eliminar células E-altas)"
+      ],
+      "trajectory_length": 100
+    },
+    {
+      "problem": "Doenças Neurodegenerativas",
+      "initial_state": {
+        "syntropy": 0.9,
+        "stage": "saudável"
+      },
+      "final_state": {
+        "step": 99,
+        "time_years": 9.9,
+        "regions": {
+          "hipocampo": 0.8470000000000025,
+          "cortex_temporal": 0.8944242500000026,
+          "cortex_frontal": 0.8968598372500027,
+          "cortex_parietal": 0.8969218725452212
+        },
+        "mean_syntropy": 0.8838014899488073,
+        "mean_entropy": 0.11619851005119275,
+        "clinical_stage": "assintomatico",
+        "phi": 1.465591290742037,
+        "cognitive_function": 0.7811050736357317
+      },
+      "metrics": {
+        "final_stage": "assintomatico",
+        "final_syntropy": 0.8838014899488073,
+        "cognitive_decline": 0.21889492636426833,
+        "years_to_symptoms": null,
+        "spread_pattern": "hipocampo → temporal → frontal → parietal"
+      },
+      "predictions": [
+        "Neurodegeneração = cascata de colapso sintrópico",
+        "Propagação segue conectividade neural (prion-like)",
+        "Cognição final: 78%",
+        "Janela terapêutica: S > 0.70 (assintomático)"
+      ],
+      "solutions": [
+        "Prevenir misfolding (chaperonas)",
+        "Degradar agregados (autofagia, imunoterapia)",
+        "Bloquear propagação (anticorpos anti-seed)",
+        "Neuroproteção (fatores tróficos)",
+        "Suporte energético (NAD+, mitocôndrias)"
+      ],
+      "trajectory_length": 100
+    },
+    {
+      "problem": "Resistência Antimicrobiana",
+      "initial_state": {
+        "sensitive": 0.99,
+        "resistant": 0.01
+      },
+      "final_state": {
+        "step": 99,
+        "time": 0.99,
+        "sensitive_fraction": 0.04505767737643123,
+        "resistant_fraction": 0.9549423226235688,
+        "antibiotic_on": true,
+        "system_entropy": 0.2621503325774289,
+        "resistance_risk": 0.9549423226235688
+      },
+      "metrics": {
+        "final_resistant_fraction": 0.9549423226235688,
+        "resistance_increase": 95.49423226235687,
+        "max_resistance": 0.9549423226235688,
+        "cycles_simulated": 5
+      },
+      "predictions": [
+        "Uso de antibióticos seleciona resistência",
+        "Fração resistente final: 95.5%",
+        "Ciclos de antibiótico permitem recuperação de sensíveis",
+        "Estratégia: manter pressão seletiva variável"
+      ],
+      "solutions": [
+        "Aumentar E bacteriana: novos antibióticos multi-alvo",
+        "Quebrar S bacteriana: anti-biofilme, anti-quorum sensing",
+        "Reduzir pressão seletiva: uso racional",
+        "Fagoterapia: usar vírus bactericidas",
+        "Abordagem evolutiva: não eliminar 100%"
+      ],
+      "trajectory_length": 100
+    },
+    {
+      "problem": "Fusão Nuclear Controlada",
+      "initial_state": {
+        "temperature": 1000000.0,
+        "Q": 0.1
+      },
+      "final_state": {
+        "step": 99,
+        "time": 0.99,
+        "temperature_MK": 131.501257846304,
+        "density": 1e+20,
+        "confinement_s": 1.9218631980856282,
+        "lawson_parameter": 2.5272742795678063e+25,
+        "Q_factor": 84242.47598559354,
+        "plasma_entropy": 0.8506700209234774,
+        "plasma_syntropy": 0.14932997907652257,
+        "fusion_active": true
+      },
+      "metrics": {
+        "fusion_achieved": true,
+        "ignition_step": 0,
+        "final_Q": 84242.47598559354,
+        "final_temperature_MK": 131.501257846304,
+        "final_confinement": 1.9218631980856282,
+        "lawson_achieved": true
+      },
+      "predictions": [
+        "Fusão sustentada (Q≥1): ALCANÇADA",
+        "Q final: 84242.5",
+        "Temperatura: 132 milhões K",
+        "Fusão comercial: Q > 10 necessário"
+      ],
+      "solutions": [
+        "Otimizar confinamento magnético (S_plasma ↑)",
+        "Aumentar tempo de confinamento τ",
+        "Melhorar aquecimento (ℰ_input eficiente)",
+        "Desenvolver materiais para primeira parede",
+        "ITER → DEMO → Comercial (2040-2060)"
+      ],
+      "trajectory_length": 100
+    }
+  ]
+}
