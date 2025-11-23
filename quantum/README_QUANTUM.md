@@ -1,4 +1,4 @@
-﻿# IBM Quantum Experimental Validation
+# IBM Quantum Experimental Validation
 
 ## Setup (Primeira vez)
 pip install -r requirements_quantum.txt

@@ -1,7 +1,25 @@
 import numpy as np, camb, emcee, matplotlib.pyplot as plt, urllib.request, os
-os.chdir(r"D:\Downloads\o\empirico")
-urllib.request.urlretrieve("https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_PowerSpect_CMB-TT-full_R3.01.txt", "planck_tt.txt")
-ell, Dl_TT = np.loadtxt("planck_tt.txt", unpack=True, usecols=(0,1))[:2000]
+
+# Get script directory and set up paths
+script_dir = os.path.dirname(os.path.abspath(__file__))
+data_dir = os.path.join(os.path.dirname(script_dir), 'data')
+output_dir = script_dir
+
+# Ensure data directory exists
+os.makedirs(data_dir, exist_ok=True)
+
+# Download Planck data if not present
+planck_file = os.path.join(data_dir, 'planck_tt.txt')
+if not os.path.exists(planck_file):
+    print("Downloading Planck CMB data...")
+    urllib.request.urlretrieve(
+        "https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_PowerSpect_CMB-TT-full_R3.01.txt", 
+        planck_file
+    )
+    print(f"Data saved to {planck_file}")
+
+# Load data
+ell, Dl_TT = np.loadtxt(planck_file, unpack=True, usecols=(0,1))[:2000]
 def Dl_model(ell,H0,ombh2,omch2,tau,As,ns,l0):
     pars=camb.CAMBparams()
     pars.set_cosmology(H0=H0,ombh2=ombh2,omch2=omch2,tau=tau)
@@ -23,5 +41,5 @@ plt.loglog(ell,Dl_model(ell,67,0.022,0.12,0.06,2e-9,0.96,l0),"r-",label=f"Model"
 plt.xlabel("Multipolo l")
 plt.ylabel("DlTT (muK2)")
 plt.legend()
-plt.savefig("cmb.png")
-print("cmb.png gerado")
+plt.savefig(os.path.join(output_dir, "cmb.png"))
+print(f"cmb.png saved to {output_dir}")

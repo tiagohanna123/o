@@ -1,4 +1,4 @@
-﻿import os
+import os
 from getpass import getpass
 
 def setup_token():
