@@ -55,10 +55,15 @@
         <p><a href="https://zenodo.org/records/17652550">https://zenodo.org/records/17652550</a></p>
     </div>
     <script>
-        // Fallback JavaScript redirect
+        // JavaScript fallback in case meta refresh fails
+        const ZENODO_URL = "https://zenodo.org/records/17652550";
+        
+        // Wait 1 second before attempting redirect (allows meta refresh to work first)
         setTimeout(function() {
-            window.location.href = "https://zenodo.org/records/17652550";
-        }, 100);
+            if (window.location.href.indexOf('zenodo') === -1) {
+                window.location.href = ZENODO_URL;
+            }
+        }, 1000);
     </script>
 </body>
 </html>
