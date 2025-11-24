@@ -1,84 +1,880 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <title>Assistente Modelo X – Engenharia de Software</title>
-    <style>
-      body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; }
-      #chat-container { flex: 2; display: flex; flex-direction: column; padding: 1rem; }
-      #panel-x { flex: 1; padding: 1rem; border-left: 1px solid #ccc; background: #f9f9f9; }
-      #messages { flex: 1; overflow-y: auto; border: 1px solid #ccc; padding: 0.5rem; margin-bottom: 0.5rem; }
-      .msg-user { text-align: right; margin: 0.25rem 0; }
-      .msg-bot { text-align: left; margin: 0.25rem 0; }
-      textarea { width: 100%; }
-    </style>
-  </head>
-  <body>
-    <div id="chat-container">
-      <h2>Assistente Modelo X – Engenharia de Software</h2>
-      <div id="messages"></div>
-      <textarea id="input" rows="3" placeholder="Digite sua pergunta sobre código..."></textarea>
-      <button id="send">Enviar</button>
-    </div>
-    <div id="panel-x">
-      <h3>Painel Modelo X</h3>
-      <p><strong>σ (entropia):</strong> <span id="sigma-val">—</span></p>
-      <p><strong>S (sintropia):</strong> <span id="S-val">—</span></p>
-      <p><strong>X = σ − S:</strong> <span id="X-val">—</span></p>
-      <p><strong>Coerência:</strong> <span id="coh-val">—</span></p>
-      <pre id="energy-vector"></pre>
-      <p id="x-interpretation"></p>
-    </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model X Agent - Assistente de Engenharia de Software</title>
+  <style>
+    :root {
+      --primary-color: #6366f1;
+      --primary-hover: #4f46e5;
+      --bg-color: #f8fafc;
+      --panel-bg: #ffffff;
+      --border-color: #e2e8f0;
+      --text-color: #1e293b;
+      --text-muted: #64748b;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --error-color: #ef4444;
+      --user-msg-bg: #6366f1;
+      --bot-msg-bg: #f1f5f9;
+    }
 
-    <script>
-      const messagesDiv = document.getElementById('messages');
-      const input = document.getElementById('input');
-      const sendBtn = document.getElementById('send');
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-      let conversationId = String(Date.now());
-      let isNewConversation = true;
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-      function addMessage(text, cls) {
-        const p = document.createElement('p');
-        p.className = cls;
-        p.textContent = text;
-        messagesDiv.appendChild(p);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    /* Header */
+    .header {
+      background: var(--panel-bg);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .header h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .header h1::before {
+      content: "⚛";
+      font-size: 1.5rem;
+    }
+
+    .new-chat-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+
+    .new-chat-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Main container */
+    .main-container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* Chat section */
+    .chat-section {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .messages-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 0.75rem 1rem;
+      border-radius: 1rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .message-user {
+      background: var(--user-msg-bg);
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 0.25rem;
+    }
+
+    .message-bot {
+      background: var(--bot-msg-bg);
+      color: var(--text-color);
+      align-self: flex-start;
+      border-bottom-left-radius: 0.25rem;
+    }
+
+    .message-error {
+      background: #fef2f2;
+      color: var(--error-color);
+      border: 1px solid #fecaca;
+    }
+
+    .typing-indicator {
+      display: flex;
+      gap: 0.25rem;
+      padding: 1rem;
+      align-self: flex-start;
+    }
+
+    .typing-indicator span {
+      width: 8px;
+      height: 8px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      animation: typing 1.4s infinite ease-in-out;
+    }
+
+    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typing {
+      0%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-8px); }
+    }
+
+    /* Input area */
+    .input-area {
+      padding: 1rem 1.5rem;
+      background: var(--panel-bg);
+      border-top: 1px solid var(--border-color);
+    }
+
+    .input-wrapper {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-end;
+    }
+
+    .input-wrapper textarea {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 0.75rem;
+      font-size: 1rem;
+      font-family: inherit;
+      resize: none;
+      min-height: 44px;
+      max-height: 150px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input-wrapper textarea:focus {
+      border-color: var(--primary-color);
+    }
+
+    .send-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .send-btn:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+
+    .send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .send-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Model X Panel */
+    .panel-x {
+      width: 320px;
+      background: var(--panel-bg);
+      border-left: 1px solid var(--border-color);
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .panel-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      background: var(--panel-bg);
+    }
+
+    .panel-header h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .panel-content {
+      padding: 1rem 1.25rem;
+    }
+
+    .metric-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .metric-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .metric-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+
+    .metric-card {
+      background: var(--bg-color);
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      text-align: center;
+    }
+
+    .metric-card .label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .metric-card .value {
+      font-size: 1.125rem;
+      font-weight: 600;
+      font-family: 'Monaco', 'Consolas', monospace;
+    }
+
+    .metric-card.sigma .value { color: var(--warning-color); }
+    .metric-card.sintropia .value { color: var(--success-color); }
+    .metric-card.x-value .value { color: var(--primary-color); }
+
+    .coherence-bar {
+      background: var(--bg-color);
+      border-radius: 0.5rem;
+      padding: 0.75rem;
+    }
+
+    .coherence-bar .label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .coherence-track {
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .coherence-fill {
+      height: 100%;
+      background: var(--success-color);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .coherence-value {
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-align: right;
+      margin-top: 0.25rem;
+    }
+
+    .interpretation-box {
+      background: var(--bg-color);
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--text-color);
+      min-height: 60px;
+    }
+
+    .energy-vector-box {
+      background: #1e293b;
+      color: #94a3b8;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      font-family: 'Monaco', 'Consolas', monospace;
+      font-size: 0.75rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .energy-vector-box .key { color: #7dd3fc; }
+    .energy-vector-box .value { color: #fde047; }
+
+    .empty-state {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Settings toggle */
+    .settings-section {
+      border-top: 1px solid var(--border-color);
+      margin-top: 1rem;
+      padding-top: 1rem;
+    }
+
+    .settings-toggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      padding: 0.5rem 0;
+    }
+
+    .settings-toggle .label {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .settings-content {
+      display: none;
+      margin-top: 0.75rem;
+    }
+
+    .settings-content.open {
+      display: block;
+    }
+
+    .settings-content label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .settings-content input {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      outline: none;
+    }
+
+    .settings-content input:focus {
+      border-color: var(--primary-color);
+    }
+
+    .connection-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-muted);
+    }
+
+    .status-dot.connected { background: var(--success-color); }
+    .status-dot.error { background: var(--error-color); }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .main-container {
+        flex-direction: column;
       }
+
+      .panel-x {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid var(--border-color);
+        max-height: 40vh;
+      }
+
+      .metric-cards {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* Welcome message */
+    .welcome-message {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 2rem;
+    }
+
+    .welcome-message h2 {
+      font-size: 1.25rem;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .welcome-message p {
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <h1>Model X Agent</h1>
+    <button class="new-chat-btn" id="newChatBtn">+ Nova Conversa</button>
+  </header>
+
+  <!-- Main Container -->
+  <div class="main-container">
+    <!-- Chat Section -->
+    <section class="chat-section">
+      <div class="messages-container" id="messagesContainer">
+        <div class="welcome-message">
+          <h2>Bem-vindo ao Model X Agent</h2>
+          <p>Assistente de engenharia de software baseado no Modelo X (X = σ − S)</p>
+        </div>
+      </div>
+      <div class="input-area">
+        <div class="input-wrapper">
+          <textarea 
+            id="messageInput" 
+            placeholder="Digite sua mensagem..." 
+            rows="1"
+            autofocus
+          ></textarea>
+          <button class="send-btn" id="sendBtn" title="Enviar mensagem">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Model X Panel -->
+    <aside class="panel-x">
+      <div class="panel-header">
+        <h2>📊 Painel Modelo X</h2>
+      </div>
+      <div class="panel-content">
+        <!-- Métricas principais -->
+        <div class="metric-group">
+          <div class="metric-title">Métricas do Modelo X</div>
+          <div class="metric-cards">
+            <div class="metric-card sigma">
+              <div class="label">σ (Entropia)</div>
+              <div class="value" id="sigmaVal">—</div>
+            </div>
+            <div class="metric-card sintropia">
+              <div class="label">S (Sintropia)</div>
+              <div class="value" id="sintropiaVal">—</div>
+            </div>
+            <div class="metric-card x-value">
+              <div class="label">X = σ − S</div>
+              <div class="value" id="xVal">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coerência -->
+        <div class="metric-group">
+          <div class="metric-title">Score de Coerência</div>
+          <div class="coherence-bar">
+            <div class="coherence-track">
+              <div class="coherence-fill" id="coherenceFill" style="width: 0%"></div>
+            </div>
+            <div class="coherence-value" id="coherenceVal">—</div>
+          </div>
+        </div>
+
+        <!-- Interpretação -->
+        <div class="metric-group">
+          <div class="metric-title">Interpretação de X</div>
+          <div class="interpretation-box" id="xInterpretation">
+            <span class="empty-state">Envie uma mensagem para ver a interpretação...</span>
+          </div>
+        </div>
+
+        <!-- Vetor de Energia -->
+        <div class="metric-group">
+          <div class="metric-title">Vetor de Energia (10D)</div>
+          <div class="energy-vector-box" id="energyVector">
+            <span class="empty-state">Aguardando dados...</span>
+          </div>
+        </div>
+
+        <!-- Configurações -->
+        <div class="settings-section">
+          <div class="settings-toggle" id="settingsToggle">
+            <span class="label">⚙️ Configurações da API</span>
+            <span id="toggleIcon">▼</span>
+          </div>
+          <div class="settings-content" id="settingsContent">
+            <label for="apiUrl">URL da API (Backend)</label>
+            <input 
+              type="text" 
+              id="apiUrl" 
+              placeholder="https://seu-backend.com"
+              value=""
+            >
+            <div class="connection-status">
+              <span class="status-dot" id="statusDot"></span>
+              <span id="statusText">Não configurado</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // ============================================
+    // MODEL X AGENT - FRONTEND
+    // ============================================
+    // Configuração: Defina a URL base da API do backend
+    // Por padrão, usa a mesma origem (para quando servido pelo FastAPI)
+    // Altere para a URL do seu backend em produção
+    // ============================================
+
+    (function() {
+      'use strict';
+
+      // DOM Elements
+      const messagesContainer = document.getElementById('messagesContainer');
+      const messageInput = document.getElementById('messageInput');
+      const sendBtn = document.getElementById('sendBtn');
+      const newChatBtn = document.getElementById('newChatBtn');
+      const apiUrlInput = document.getElementById('apiUrl');
+      const settingsToggle = document.getElementById('settingsToggle');
+      const settingsContent = document.getElementById('settingsContent');
+      const toggleIcon = document.getElementById('toggleIcon');
+      const statusDot = document.getElementById('statusDot');
+      const statusText = document.getElementById('statusText');
+
+      // Panel elements
+      const sigmaVal = document.getElementById('sigmaVal');
+      const sintropiaVal = document.getElementById('sintropiaVal');
+      const xVal = document.getElementById('xVal');
+      const coherenceVal = document.getElementById('coherenceVal');
+      const coherenceFill = document.getElementById('coherenceFill');
+      const xInterpretation = document.getElementById('xInterpretation');
+      const energyVector = document.getElementById('energyVector');
+
+      // State
+      let conversationId = generateConversationId();
+      let isNewConversation = true;
+      let isLoading = false;
+
+      // Default API URL - empty means same origin
+      const DEFAULT_API_URL = '';
+      let apiBaseUrl = localStorage.getItem('modelx_api_url') || DEFAULT_API_URL;
+      apiUrlInput.value = apiBaseUrl;
+
+      // ============================================
+      // UTILITY FUNCTIONS
+      // ============================================
+
+      function generateConversationId() {
+        return 'conv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      }
+
+      function getApiUrl() {
+        const url = apiUrlInput.value.trim();
+        // Remove trailing slash if present
+        return url.replace(/\/$/, '');
+      }
+
+      function formatNumber(num, decimals = 3) {
+        if (typeof num !== 'number' || isNaN(num)) return '—';
+        return num.toFixed(decimals);
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      function formatEnergyVector(energy) {
+        if (!energy || typeof energy !== 'object') {
+          return '<span class="empty-state">Sem dados</span>';
+        }
+        
+        const lines = Object.entries(energy).map(([key, value]) => {
+          const formattedValue = typeof value === 'number' ? value.toFixed(4) : value;
+          return `<span class="key">"${key}"</span>: <span class="value">${formattedValue}</span>`;
+        });
+        
+        return '{\n  ' + lines.join(',\n  ') + '\n}';
+      }
+
+      // ============================================
+      // UI FUNCTIONS
+      // ============================================
+
+      function addMessage(text, type) {
+        // Remove welcome message if present
+        const welcome = messagesContainer.querySelector('.welcome-message');
+        if (welcome) welcome.remove();
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message message-${type}`;
+        messageDiv.textContent = text;
+        messagesContainer.appendChild(messageDiv);
+        scrollToBottom();
+      }
+
+      function addTypingIndicator() {
+        const typing = document.createElement('div');
+        typing.className = 'typing-indicator';
+        typing.id = 'typingIndicator';
+        typing.innerHTML = '<span></span><span></span><span></span>';
+        messagesContainer.appendChild(typing);
+        scrollToBottom();
+      }
+
+      function removeTypingIndicator() {
+        const typing = document.getElementById('typingIndicator');
+        if (typing) typing.remove();
+      }
+
+      function scrollToBottom() {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+
+      function setLoading(loading) {
+        isLoading = loading;
+        sendBtn.disabled = loading;
+        messageInput.disabled = loading;
+        
+        if (loading) {
+          addTypingIndicator();
+        } else {
+          removeTypingIndicator();
+        }
+      }
+
+      function updatePanel(data) {
+        // Métricas
+        sigmaVal.textContent = formatNumber(data.sigma);
+        sintropiaVal.textContent = formatNumber(data.S);
+        xVal.textContent = formatNumber(data.X);
+        
+        // Coerência
+        const coherence = data.coherence_score || 0;
+        coherenceVal.textContent = formatNumber(coherence, 2);
+        coherenceFill.style.width = `${Math.min(100, coherence * 100)}%`;
+        
+        // Cor da barra de coerência
+        if (coherence >= 0.7) {
+          coherenceFill.style.background = 'var(--success-color)';
+        } else if (coherence >= 0.4) {
+          coherenceFill.style.background = 'var(--warning-color)';
+        } else {
+          coherenceFill.style.background = 'var(--error-color)';
+        }
+        
+        // Interpretação
+        if (data.x_interpretation) {
+          xInterpretation.textContent = data.x_interpretation;
+        } else {
+          xInterpretation.innerHTML = '<span class="empty-state">Sem interpretação disponível</span>';
+        }
+        
+        // Vetor de energia
+        energyVector.innerHTML = formatEnergyVector(data.energy_vector);
+      }
+
+      function resetPanel() {
+        sigmaVal.textContent = '—';
+        sintropiaVal.textContent = '—';
+        xVal.textContent = '—';
+        coherenceVal.textContent = '—';
+        coherenceFill.style.width = '0%';
+        xInterpretation.innerHTML = '<span class="empty-state">Envie uma mensagem para ver a interpretação...</span>';
+        energyVector.innerHTML = '<span class="empty-state">Aguardando dados...</span>';
+      }
+
+      function updateConnectionStatus(status, message) {
+        statusDot.className = 'status-dot ' + status;
+        statusText.textContent = message;
+      }
+
+      // ============================================
+      // API FUNCTIONS
+      // ============================================
 
       async function sendMessage() {
-        const text = input.value.trim();
-        if (!text) return;
-        addMessage(text, 'msg-user');
-        input.value = '';
-        const res = await fetch('/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            conversation_id: conversationId,
-            message: text,
-            is_new_conversation: isNewConversation
-          })
-        });
-        isNewConversation = false;
-        const data = await res.json();
-        addMessage(data.answer_text, 'msg-bot');
+        const text = messageInput.value.trim();
+        if (!text || isLoading) return;
 
-        document.getElementById('sigma-val').textContent = data.sigma.toFixed(3);
-        document.getElementById('S-val').textContent = data.S.toFixed(3);
-        document.getElementById('X-val').textContent = data.X.toFixed(3);
-        document.getElementById('coh-val').textContent = data.coherence_score.toFixed(2);
-        document.getElementById('x-interpretation').textContent = data.x_interpretation;
-        document.getElementById('energy-vector').textContent = JSON.stringify(data.energy_vector, null, 2);
+        // Add user message to chat
+        addMessage(text, 'user');
+        messageInput.value = '';
+        autoResizeTextarea();
+
+        // Set loading state
+        setLoading(true);
+
+        try {
+          const apiUrl = getApiUrl();
+          const endpoint = apiUrl ? `${apiUrl}/chat` : '/chat';
+          
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              conversation_id: conversationId,
+              message: text,
+              is_new_conversation: isNewConversation
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          const data = await response.json();
+          
+          // Mark conversation as not new after first message
+          isNewConversation = false;
+          
+          // Add bot response
+          addMessage(data.answer_text, 'bot');
+          
+          // Update panel with metrics
+          updatePanel(data);
+          
+          // Update connection status
+          updateConnectionStatus('connected', 'Conectado');
+
+        } catch (error) {
+          console.error('Error sending message:', error);
+          addMessage(`Erro ao enviar mensagem: ${error.message}`, 'error');
+          updateConnectionStatus('error', `Erro: ${error.message}`);
+        } finally {
+          setLoading(false);
+          messageInput.focus();
+        }
       }
 
-      sendBtn.onclick = sendMessage;
-      input.addEventListener('keydown', e => {
+      function startNewConversation() {
+        conversationId = generateConversationId();
+        isNewConversation = true;
+        
+        // Clear messages
+        messagesContainer.innerHTML = `
+          <div class="welcome-message">
+            <h2>Bem-vindo ao Model X Agent</h2>
+            <p>Assistente de engenharia de software baseado no Modelo X (X = σ − S)</p>
+          </div>
+        `;
+        
+        // Reset panel
+        resetPanel();
+        
+        // Focus input
+        messageInput.focus();
+      }
+
+      // ============================================
+      // EVENT HANDLERS
+      // ============================================
+
+      function autoResizeTextarea() {
+        messageInput.style.height = 'auto';
+        messageInput.style.height = Math.min(messageInput.scrollHeight, 150) + 'px';
+      }
+
+      // Send button click
+      sendBtn.addEventListener('click', sendMessage);
+
+      // Enter to send (Shift+Enter for new line)
+      messageInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
           e.preventDefault();
           sendMessage();
         }
       });
-    </script>
-  </body>
+
+      // Auto-resize textarea
+      messageInput.addEventListener('input', autoResizeTextarea);
+
+      // New conversation button
+      newChatBtn.addEventListener('click', startNewConversation);
+
+      // Settings toggle
+      settingsToggle.addEventListener('click', () => {
+        const isOpen = settingsContent.classList.toggle('open');
+        toggleIcon.textContent = isOpen ? '▲' : '▼';
+      });
+
+      // Save API URL on change
+      apiUrlInput.addEventListener('change', () => {
+        const url = apiUrlInput.value.trim();
+        localStorage.setItem('modelx_api_url', url);
+        apiBaseUrl = url;
+        
+        if (url) {
+          updateConnectionStatus('', 'Configurado: ' + url);
+        } else {
+          updateConnectionStatus('', 'Usando mesma origem');
+        }
+      });
+
+      // ============================================
+      // INITIALIZATION
+      // ============================================
+
+      function init() {
+        // Set initial connection status
+        if (apiBaseUrl) {
+          updateConnectionStatus('', 'Configurado: ' + apiBaseUrl);
+        } else {
+          updateConnectionStatus('', 'Usando mesma origem');
+        }
+        
+        // Focus input
+        messageInput.focus();
+      }
+
+      init();
+    })();
+  </script>
+</body>
 </html>
