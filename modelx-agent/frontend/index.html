@@ -54,11 +54,6 @@
       gap: 0.5rem;
     }
 
-    .header h1::before {
-      content: "⚛";
-      font-size: 1.5rem;
-    }
-
     .new-chat-btn {
       background: var(--primary-color);
       color: white;
@@ -453,8 +448,8 @@
 <body>
   <!-- Header -->
   <header class="header">
-    <h1>Model X Agent</h1>
-    <button class="new-chat-btn" id="newChatBtn">+ Nova Conversa</button>
+    <h1><span aria-hidden="true">⚛</span> Model X Agent</h1>
+    <button class="new-chat-btn" id="newChatBtn" aria-label="Iniciar nova conversa">+ Nova Conversa</button>
   </header>
 
   <!-- Main Container -->
@@ -538,9 +533,9 @@
 
         <!-- Configurações -->
         <div class="settings-section">
-          <div class="settings-toggle" id="settingsToggle">
-            <span class="label">⚙️ Configurações da API</span>
-            <span id="toggleIcon">▼</span>
+          <div class="settings-toggle" id="settingsToggle" role="button" tabindex="0" aria-expanded="false" aria-label="Configurações da API">
+            <span class="label"><span aria-hidden="true">⚙️</span> Configurações da API</span>
+            <span id="toggleIcon" aria-hidden="true">▼</span>
           </div>
           <div class="settings-content" id="settingsContent">
             <label for="apiUrl">URL da API (Backend)</label>
@@ -608,7 +603,7 @@
       // ============================================
 
       function generateConversationId() {
-        return 'conv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        return 'conv_' + Date.now() + '_' + Math.random().toString(36).substring(2, 11);
       }
 
       function getApiUrl() {
@@ -842,6 +837,15 @@
       settingsToggle.addEventListener('click', () => {
         const isOpen = settingsContent.classList.toggle('open');
         toggleIcon.textContent = isOpen ? '▲' : '▼';
+        settingsToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+
+      // Settings toggle keyboard support
+      settingsToggle.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          settingsToggle.click();
+        }
       });
 
       // Save API URL on change

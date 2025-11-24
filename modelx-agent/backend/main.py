@@ -24,10 +24,12 @@ app = FastAPI(
 )
 
 # Configuração de CORS para permitir acesso de outros domínios
-# Em produção, substitua ["*"] pelas origens específicas permitidas
+# AVISO DE SEGURANÇA: allow_origins=["*"] permite requisições de qualquer domínio.
+# Em produção, substitua ["*"] pelas origens específicas permitidas, por exemplo:
+# allow_origins=["https://seu-frontend.netlify.app", "https://seudominio.com"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure com suas origens em produção
+    allow_origins=["*"],  # TODO: Configure com suas origens específicas em produção
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
