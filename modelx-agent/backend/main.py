@@ -1,7 +1,11 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Dict
 import time
+import os
 
 from .conversation_state import ConversationState, update_rhythm_stats, append_message
 from .coding_engineering.interpret import classify_coding_subdomain
@@ -13,7 +17,23 @@ from .coding_engineering.coherence_evaluator import evaluate_coherence
 from .meta_learning import update_parameters
 
 
-app = FastAPI()
+app = FastAPI(
+    title="Model X Agent API",
+    description="Assistente de engenharia de software baseado no Modelo X (X = σ − S)",
+    version="1.0.0"
+)
+
+# Configuração de CORS para permitir acesso de outros domínios
+# AVISO DE SEGURANÇA: allow_origins=["*"] permite requisições de qualquer domínio.
+# Em produção, substitua ["*"] pelas origens específicas permitidas, por exemplo:
+# allow_origins=["https://seu-frontend.netlify.app", "https://seudominio.com"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # TODO: Configure com suas origens específicas em produção
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Em um sistema real, isso deve ir para algum store (cache/DB)
 CONVERSATIONS: Dict[str, ConversationState] = {}
@@ -99,3 +119,18 @@ def chat(req: ChatRequest):
         energy_vector=E,
         coherence_score=feedback["coherence_score"]
     )
+
+
+# Endpoint para servir o frontend (desenvolvimento/testes)
+# Em produção, o frontend deve ser servido por um servidor estático separado
+@app.get("/")
+async def serve_frontend():
+    """Serve the frontend index.html"""
+    frontend_path = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)),
+        "frontend",
+        "index.html"
+    )
+    if os.path.exists(frontend_path):
+        return FileResponse(frontend_path, media_type="text/html")
+    return {"message": "Frontend not found. API is running at /chat"}
