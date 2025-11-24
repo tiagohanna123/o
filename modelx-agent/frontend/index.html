@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>Assistente Modelo X – Engenharia de Software</title>
+    <style>
+      body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; }
+      #chat-container { flex: 2; display: flex; flex-direction: column; padding: 1rem; }
+      #panel-x { flex: 1; padding: 1rem; border-left: 1px solid #ccc; background: #f9f9f9; }
+      #messages { flex: 1; overflow-y: auto; border: 1px solid #ccc; padding: 0.5rem; margin-bottom: 0.5rem; }
+      .msg-user { text-align: right; margin: 0.25rem 0; }
+      .msg-bot { text-align: left; margin: 0.25rem 0; }
+      textarea { width: 100%; }
+    </style>
+  </head>
+  <body>
+    <div id="chat-container">
+      <h2>Assistente Modelo X – Engenharia de Software</h2>
+      <div id="messages"></div>
+      <textarea id="input" rows="3" placeholder="Digite sua pergunta sobre código..."></textarea>
+      <button id="send">Enviar</button>
+    </div>
+    <div id="panel-x">
+      <h3>Painel Modelo X</h3>
+      <p><strong>σ (entropia):</strong> <span id="sigma-val">—</span></p>
+      <p><strong>S (sintropia):</strong> <span id="S-val">—</span></p>
+      <p><strong>X = σ − S:</strong> <span id="X-val">—</span></p>
+      <p><strong>Coerência:</strong> <span id="coh-val">—</span></p>
+      <pre id="energy-vector"></pre>
+      <p id="x-interpretation"></p>
+    </div>
+
+    <script>
+      const messagesDiv = document.getElementById('messages');
+      const input = document.getElementById('input');
+      const sendBtn = document.getElementById('send');
+
+      let conversationId = String(Date.now());
+      let isNewConversation = true;
+
+      function addMessage(text, cls) {
+        const p = document.createElement('p');
+        p.className = cls;
+        p.textContent = text;
+        messagesDiv.appendChild(p);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+
+      async function sendMessage() {
+        const text = input.value.trim();
+        if (!text) return;
+        addMessage(text, 'msg-user');
+        input.value = '';
+        const res = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            conversation_id: conversationId,
+            message: text,
+            is_new_conversation: isNewConversation
+          })
+        });
+        isNewConversation = false;
+        const data = await res.json();
+        addMessage(data.answer_text, 'msg-bot');
+
+        document.getElementById('sigma-val').textContent = data.sigma.toFixed(3);
+        document.getElementById('S-val').textContent = data.S.toFixed(3);
+        document.getElementById('X-val').textContent = data.X.toFixed(3);
+        document.getElementById('coh-val').textContent = data.coherence_score.toFixed(2);
+        document.getElementById('x-interpretation').textContent = data.x_interpretation;
+        document.getElementById('energy-vector').textContent = JSON.stringify(data.energy_vector, null, 2);
+      }
+
+      sendBtn.onclick = sendMessage;
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+    </script>
+  </body>
+</html>
