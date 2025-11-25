@@ -92,11 +92,15 @@ def call_llm(prompt: str, options: Optional[Dict[str, Any]] = None) -> str:
     # Trunca o prompt se necessário
     original_length = len(prompt)
     if original_length > MAX_PROMPT_LENGTH:
-        # Tenta manter o início e o fim do prompt, removendo o meio
-        half_length = MAX_PROMPT_LENGTH // 2
-        prompt = prompt[:half_length] + "\n\n[... conteúdo truncado ...]\n\n" + prompt[-half_length:]
+        # Calcula o tamanho de cada parte considerando o texto de truncamento
+        truncation_text = "\n\n[... conteúdo truncado ...]\n\n"
+        available_length = MAX_PROMPT_LENGTH - len(truncation_text)
+        half_length = available_length // 2
+        
+        # Monta o prompt truncado garantindo que não exceda o limite
+        prompt = prompt[:half_length] + truncation_text + prompt[-half_length:]
         logger.warning(
-            f"Prompt truncado de {original_length} para ~{len(prompt)} caracteres"
+            f"Prompt truncado de {original_length} para {len(prompt)} caracteres"
         )
     
     # Usa opções padrão se não fornecidas
@@ -130,10 +134,14 @@ def call_llm(prompt: str, options: Optional[Dict[str, Any]] = None) -> str:
             result = response.json()
             answer = result.get("response", "")
             
-            # Log de métricas
+            # Log de métricas (com proteção completa contra divisão por zero)
             eval_count = result.get("eval_count", 0)
             eval_duration = result.get("eval_duration", 0)
-            tokens_per_second = (eval_count / (eval_duration / 1e9)) if eval_duration > 0 else 0
+            
+            if eval_count > 0 and eval_duration > 0:
+                tokens_per_second = eval_count / (eval_duration / 1e9)
+            else:
+                tokens_per_second = 0.0
             
             logger.info(
                 f"Resposta em {elapsed_time:.2f}s - "

@@ -1,14 +1,42 @@
 from typing import Dict, List, Optional
 from pathlib import Path
+import os
 
 
-# Carrega o conhecimento oficial do Modelo X uma única vez no nível do módulo
+def _find_repo_root() -> Path:
+    """
+    Encontra a raiz do repositório procurando por arquivos marcadores.
+    
+    Procura por .git, pyproject.toml, setup.py ou README.md subindo na hierarquia.
+    """
+    current_dir = Path(__file__).resolve().parent
+    
+    # Primeiro tenta usar variável de ambiente se disponível
+    if "REPO_ROOT" in os.environ:
+        return Path(os.environ["REPO_ROOT"])
+    
+    # Procura por marcadores comuns subindo na hierarquia
+    markers = [".git", "pyproject.toml", "setup.py", "README.md"]
+    
+    search_dir = current_dir
+    for _ in range(10):  # Limite de 10 níveis para evitar loop infinito
+        for marker in markers:
+            if (search_dir / marker).exists():
+                return search_dir
+        
+        parent = search_dir.parent
+        if parent == search_dir:  # Chegou na raiz do sistema
+            break
+        search_dir = parent
+    
+    # Fallback: usa a estrutura esperada
+    # backend/coding_engineering -> backend -> modelx-agent -> raiz do repo
+    return current_dir.parent.parent.parent
+
+
 def _load_modelo_x_knowledge() -> str:
     """Carrega o conteúdo de docs/modelo_x.md como conhecimento oficial."""
-    # Navega do diretório atual até a raiz do repositório
-    current_dir = Path(__file__).resolve().parent
-    # backend/coding_engineering -> backend -> modelx-agent -> raiz do repo
-    repo_root = current_dir.parent.parent.parent
+    repo_root = _find_repo_root()
     modelo_x_path = repo_root / "docs" / "modelo_x.md"
     
     if modelo_x_path.exists():
@@ -28,6 +56,21 @@ def _load_modelo_x_knowledge() -> str:
 
 
 MODELO_X_KNOWLEDGE = _load_modelo_x_knowledge()
+
+
+# Conjuntos de palavras para detecção de idioma (constantes no nível do módulo)
+_PT_WORDS = frozenset({
+    'que', 'como', 'para', 'com', 'uma', 'um', 'não', 'por', 'mais', 'se',
+    'quando', 'qual', 'isso', 'este', 'esta', 'aqui', 'onde', 'fazer',
+    'você', 'eu', 'nós', 'ele', 'ela', 'eles', 'elas', 'código', 'função',
+    'explique', 'ajude', 'preciso', 'quero', 'tenho', 'estou', 'está'
+})
+
+_EN_WORDS = frozenset({
+    'the', 'is', 'are', 'what', 'how', 'for', 'with', 'this', 'that',
+    'not', 'but', 'can', 'you', 'have', 'from', 'when', 'which', 'there',
+    'code', 'function', 'explain', 'help', 'need', 'want', 'please'
+})
 
 
 # Exemplos de comportamento esperado (few-shot learning)
@@ -152,21 +195,10 @@ Sugestão: {sugestoes}"""
 
 def _detect_language(message: str) -> str:
     """Detecta o idioma da mensagem do usuário (heurística simples)."""
-    # Palavras comuns em português
-    pt_words = {'que', 'como', 'para', 'com', 'uma', 'um', 'não', 'por', 'mais', 'se', 
-                'quando', 'qual', 'isso', 'este', 'esta', 'aqui', 'onde', 'fazer', 
-                'você', 'eu', 'nós', 'ele', 'ela', 'eles', 'elas', 'código', 'função',
-                'explique', 'ajude', 'preciso', 'quero', 'tenho', 'estou', 'está'}
-    
-    # Palavras comuns em inglês
-    en_words = {'the', 'is', 'are', 'what', 'how', 'for', 'with', 'this', 'that', 
-                'not', 'but', 'can', 'you', 'have', 'from', 'when', 'which', 'there',
-                'code', 'function', 'explain', 'help', 'need', 'want', 'please'}
-    
     words = set(message.lower().split())
     
-    pt_count = len(words & pt_words)
-    en_count = len(words & en_words)
+    pt_count = len(words & _PT_WORDS)
+    en_count = len(words & _EN_WORDS)
     
     if en_count > pt_count:
         return "en"

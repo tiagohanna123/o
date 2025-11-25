@@ -69,7 +69,8 @@ Para usar um modelo diferente, edite a constante `OLLAMA_MODEL_NAME` em:
 ### Clone o repositório (se ainda não tiver)
 
 ```bash
-git clone https://github.com/tiagohanna123/o.git
+# Substitua pela URL do seu repositório se for um fork
+git clone <URL_DO_REPOSITORIO>
 cd o
 ```
 
