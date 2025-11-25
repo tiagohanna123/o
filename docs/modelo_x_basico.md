@@ -219,7 +219,7 @@ X = σ − S
 
 ## Próximos Passos
 
-1. **Intermediário**: Leia [MATHEMATICAL_FOUNDATIONS_PT.md](./MATHEMATICAL_FOUNDATIONS_PT.md) para entender a matemática
+1. **Intermediário**: Leia [modelo_x_avancado.md](./modelo_x_avancado.md) para entender a matemática
 2. **Avançado**: Explore o [modelo decadimensional](./decadimensional_model.md)
 3. **Prático**: Veja [modelo_x_engenharia_software.md](./modelo_x_engenharia_software.md) para aplicações em software
 4. **Código**: Explore os exemplos em [examples/](../examples/)

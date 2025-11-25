@@ -91,7 +91,9 @@ def normalized_shannon_entropy(data: np.ndarray, bins: int = 10) -> float:
     
     Args:
         data: Sequência numérica
-        bins: Número de bins para discretização
+        bins: Número de bins para discretização (determina a resolução)
+              Nota: A normalização usa este valor diretamente (log₂(bins))
+              para garantir que o resultado esteja em [0, 1].
     
     Returns:
         Entropia normalizada no intervalo [0, 1]

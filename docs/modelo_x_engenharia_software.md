@@ -77,6 +77,14 @@ Início         Desenvolvimento      Maturidade       Manutenção
 # Modelo X para diagnóstico de debugging
 
 class DebugSession:
+    # Constantes de ajuste de entropia/sintropia
+    ENTROPY_REDUCTION_PER_HYPOTHESIS = 0.1      # Redução de entropia ao eliminar hipótese
+    SYNTROPY_INCREASE_PER_HYPOTHESIS = 0.05     # Aumento de sintropia ao estruturar
+    SYNTROPY_INCREASE_ON_LISTING = 0.05         # Aumento ao listar hipóteses
+    ENTROPY_REDUCTION_ON_PRIORITIZE = 0.2       # Redução ao priorizar
+    SYNTROPY_INCREASE_ON_PRIORITIZE = 0.1       # Aumento ao priorizar
+    MIN_ENTROPY = 0.1                           # Entropia mínima (incerteza residual)
+    
     def __init__(self):
         self.hypotheses = []
         self.entropy = 0.8  # Início confuso
@@ -91,25 +99,25 @@ class DebugSession:
             'score': probability / effort  # Priorização
         })
         # Listar hipóteses aumenta estrutura
-        self.syntropy = min(1.0, self.syntropy + 0.05)
+        self.syntropy = min(1.0, self.syntropy + self.SYNTROPY_INCREASE_ON_LISTING)
         
     def prioritize(self):
         """Ordena hipóteses por score"""
         self.hypotheses.sort(key=lambda h: h['score'], reverse=True)
         # Priorizar reduz entropia significativamente
-        self.entropy = max(0.0, self.entropy - 0.2)
-        self.syntropy = min(1.0, self.syntropy + 0.1)
+        self.entropy = max(0.0, self.entropy - self.ENTROPY_REDUCTION_ON_PRIORITIZE)
+        self.syntropy = min(1.0, self.syntropy + self.SYNTROPY_INCREASE_ON_PRIORITIZE)
         
     def test_hypothesis(self, index, result: bool):
         """Testa uma hipótese (True = encontrou bug)"""
         if result:
-            self.entropy = 0.1  # Bug encontrado
+            self.entropy = self.MIN_ENTROPY  # Bug encontrado - baixa incerteza residual
             self.syntropy = 0.9
         else:
             # Eliminar hipótese reduz entropia
             self.hypotheses.pop(index)
-            self.entropy = max(0.1, self.entropy - 0.1)
-            self.syntropy = min(1.0, self.syntropy + 0.05)
+            self.entropy = max(self.MIN_ENTROPY, self.entropy - self.ENTROPY_REDUCTION_PER_HYPOTHESIS)
+            self.syntropy = min(1.0, self.syntropy + self.SYNTROPY_INCREASE_PER_HYPOTHESIS)
     
     @property
     def x(self):

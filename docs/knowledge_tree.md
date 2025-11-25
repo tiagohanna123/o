@@ -190,9 +190,12 @@ ou na forma expandida:
 - 🟢 Baixa prioridade
 
 ### Estatísticas Atuais
-- **Total de nós**: 47
-- **Documentados**: 8 (17%)
-- **Pendentes**: 39 (83%)
+
+> **Nota**: Estas estatísticas são aproximadas e serão atualizadas conforme a documentação evolui.
+
+- **Total de nós**: ~47
+- **Documentados**: ~8 (~17%)
+- **Pendentes**: ~39 (~83%)
 
 ---
 
