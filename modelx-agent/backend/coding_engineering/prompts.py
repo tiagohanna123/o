@@ -7,7 +7,8 @@ def _find_repo_root() -> Path:
     """
     Encontra a raiz do repositório procurando por arquivos marcadores.
     
-    Procura por .git, pyproject.toml, setup.py ou README.md subindo na hierarquia.
+    Procura pelo diretório .git (mais confiável) subindo na hierarquia.
+    Se não encontrar, procura por outros marcadores que contenham docs/modelo_x.md.
     """
     current_dir = Path(__file__).resolve().parent
     
@@ -15,17 +16,25 @@ def _find_repo_root() -> Path:
     if "REPO_ROOT" in os.environ:
         return Path(os.environ["REPO_ROOT"])
     
-    # Procura por marcadores comuns subindo na hierarquia
-    markers = [".git", "pyproject.toml", "setup.py", "README.md"]
-    
+    # Procura pelo .git primeiro (marcador mais confiável)
     search_dir = current_dir
     for _ in range(10):  # Limite de 10 níveis para evitar loop infinito
-        for marker in markers:
-            if (search_dir / marker).exists():
-                return search_dir
+        if (search_dir / ".git").exists():
+            return search_dir
         
         parent = search_dir.parent
         if parent == search_dir:  # Chegou na raiz do sistema
+            break
+        search_dir = parent
+    
+    # Se não encontrou .git, procura pelo diretório que contém docs/modelo_x.md
+    search_dir = current_dir
+    for _ in range(10):
+        if (search_dir / "docs" / "modelo_x.md").exists():
+            return search_dir
+        
+        parent = search_dir.parent
+        if parent == search_dir:
             break
         search_dir = parent
     
