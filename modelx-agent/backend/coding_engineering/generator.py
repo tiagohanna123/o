@@ -1,32 +1,82 @@
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 import time
 import logging
+import os
 from .prompts import build_main_prompt
 
-# Configuração do Ollama
+# ============================================================================
+# CONFIGURAÇÃO DO OLLAMA
+# ============================================================================
+
 # Nome do modelo a ser usado. Pode ser alterado para outros modelos disponíveis no Ollama.
-# Exemplos: "llama3", "llama3:8b", "phi3", "mistral", "codellama", etc.
-OLLAMA_MODEL_NAME = "llama3"
-OLLAMA_BASE_URL = "http://127.0.0.1:11434"
+# Exemplos: "llama3", "llama3:8b", "phi3", "mistral", "codellama", "qwen2", etc.
+# Pode ser sobrescrito pela variável de ambiente OLLAMA_MODEL
+OLLAMA_MODEL_NAME = os.getenv("OLLAMA_MODEL", "llama3")
+
+# URL base do Ollama. Pode ser alterada para apontar para um servidor remoto.
+# Pode ser sobrescrita pela variável de ambiente OLLAMA_URL
+OLLAMA_BASE_URL = os.getenv("OLLAMA_URL", "http://127.0.0.1:11434")
 OLLAMA_GENERATE_ENDPOINT = f"{OLLAMA_BASE_URL}/api/generate"
 
+# ============================================================================
+# PARÂMETROS DE GERAÇÃO
+# ============================================================================
+
 # Limite máximo de caracteres do prompt (para evitar problemas com modelos menores)
-MAX_PROMPT_LENGTH = 8000
+MAX_PROMPT_LENGTH = int(os.getenv("MAX_PROMPT_LENGTH", "12000"))
 
 # Timeout para chamadas ao Ollama (em segundos)
-OLLAMA_TIMEOUT = 90
+OLLAMA_TIMEOUT = int(os.getenv("OLLAMA_TIMEOUT", "120"))
 
-# Configuração de logging
-logging.basicConfig(level=logging.INFO)
+# Temperatura: controla a aleatoriedade das respostas
+# - 0.0 a 0.3: respostas mais determinísticas e focadas
+# - 0.7 a 1.0: respostas mais criativas e variadas
+# Para o Model X Agent, usamos temperatura baixa para respostas consistentes
+OLLAMA_TEMPERATURE = float(os.getenv("OLLAMA_TEMPERATURE", "0.3"))
+
+# Top-p (nucleus sampling): controla a diversidade
+# - 0.1: apenas tokens mais prováveis
+# - 0.9: considera mais opções
+OLLAMA_TOP_P = float(os.getenv("OLLAMA_TOP_P", "0.9"))
+
+# Top-k: número de tokens a considerar em cada passo
+OLLAMA_TOP_K = int(os.getenv("OLLAMA_TOP_K", "40"))
+
+# Número máximo de tokens na resposta
+OLLAMA_NUM_PREDICT = int(os.getenv("OLLAMA_NUM_PREDICT", "2048"))
+
+# Repeat penalty: penaliza repetições
+OLLAMA_REPEAT_PENALTY = float(os.getenv("OLLAMA_REPEAT_PENALTY", "1.1"))
+
+# ============================================================================
+# LOGGING
+# ============================================================================
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
 
 
-def call_llm(prompt: str) -> str:
+def _build_generation_options() -> Dict[str, Any]:
+    """Constrói as opções de geração para o Ollama."""
+    return {
+        "temperature": OLLAMA_TEMPERATURE,
+        "top_p": OLLAMA_TOP_P,
+        "top_k": OLLAMA_TOP_K,
+        "num_predict": OLLAMA_NUM_PREDICT,
+        "repeat_penalty": OLLAMA_REPEAT_PENALTY,
+    }
+
+
+def call_llm(prompt: str, options: Optional[Dict[str, Any]] = None) -> str:
     """
     Chama o modelo local via Ollama.
     
     Args:
         prompt: O prompt a ser enviado para o modelo.
+        options: Opções adicionais de geração (opcional).
     
     Returns:
         A resposta do modelo ou uma mensagem de erro em português.
@@ -42,23 +92,35 @@ def call_llm(prompt: str) -> str:
     # Trunca o prompt se necessário
     original_length = len(prompt)
     if original_length > MAX_PROMPT_LENGTH:
-        prompt = prompt[:MAX_PROMPT_LENGTH]
+        # Tenta manter o início e o fim do prompt, removendo o meio
+        half_length = MAX_PROMPT_LENGTH // 2
+        prompt = prompt[:half_length] + "\n\n[... conteúdo truncado ...]\n\n" + prompt[-half_length:]
         logger.warning(
-            f"Prompt truncado de {original_length} para {MAX_PROMPT_LENGTH} caracteres"
+            f"Prompt truncado de {original_length} para ~{len(prompt)} caracteres"
         )
     
-    logger.info(f"Chamando Ollama ({OLLAMA_MODEL_NAME}) - Tamanho do prompt: {len(prompt)} chars")
+    # Usa opções padrão se não fornecidas
+    gen_options = options or _build_generation_options()
+    
+    logger.info(
+        f"Chamando Ollama ({OLLAMA_MODEL_NAME}) - "
+        f"Prompt: {len(prompt)} chars, "
+        f"Temp: {gen_options.get('temperature', OLLAMA_TEMPERATURE)}"
+    )
     
     start_time = time.time()
     
     try:
+        request_body = {
+            "model": OLLAMA_MODEL_NAME,
+            "prompt": prompt,
+            "stream": False,
+            "options": gen_options
+        }
+        
         response = requests.post(
             OLLAMA_GENERATE_ENDPOINT,
-            json={
-                "model": OLLAMA_MODEL_NAME,
-                "prompt": prompt,
-                "stream": False
-            },
+            json=request_body,
             timeout=OLLAMA_TIMEOUT
         )
         
@@ -68,9 +130,16 @@ def call_llm(prompt: str) -> str:
             result = response.json()
             answer = result.get("response", "")
             
+            # Log de métricas
+            eval_count = result.get("eval_count", 0)
+            eval_duration = result.get("eval_duration", 0)
+            tokens_per_second = (eval_count / (eval_duration / 1e9)) if eval_duration > 0 else 0
+            
             logger.info(
-                f"Resposta recebida em {elapsed_time:.2f}s - "
-                f"Primeiros 100 chars: {answer[:100]}..."
+                f"Resposta em {elapsed_time:.2f}s - "
+                f"Tokens: {eval_count}, "
+                f"Velocidade: {tokens_per_second:.1f} tok/s - "
+                f"Preview: {answer[:80]}..."
             )
             
             return answer
@@ -95,6 +164,7 @@ def call_llm(prompt: str) -> str:
             f"  1. Instale o Ollama: https://ollama.ai/download\n"
             f"  2. Execute: ollama serve\n"
             f"  3. Em outro terminal: ollama pull {OLLAMA_MODEL_NAME}\n\n"
+            f"Dica: Você pode configurar a URL do Ollama com a variável de ambiente OLLAMA_URL.\n\n"
             f"Detalhes técnicos: Conexão recusada"
         )
         logger.error(error_msg)
@@ -109,6 +179,7 @@ def call_llm(prompt: str) -> str:
             f"  - O modelo está sendo carregado pela primeira vez (aguarde e tente novamente)\n"
             f"  - O prompt é muito longo\n"
             f"  - O hardware não tem recursos suficientes\n\n"
+            f"Dica: Você pode aumentar o timeout com a variável de ambiente OLLAMA_TIMEOUT.\n\n"
             f"Detalhes técnicos:\n"
             f"  - Tempo decorrido: {elapsed_time:.2f}s\n"
             f"  - Timeout configurado: {OLLAMA_TIMEOUT}s"
@@ -130,7 +201,8 @@ def call_llm(prompt: str) -> str:
 def generate_answer(message: str,
                     energy_vector: Dict[str, float],
                     sigma_S_X: Dict[str, float],
-                    state) -> Dict[str, Any]:
+                    state,
+                    options: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """
     Gera uma resposta usando o Model X Agent.
     
@@ -139,12 +211,13 @@ def generate_answer(message: str,
         energy_vector: Vetor de energia em 10 dimensões.
         sigma_S_X: Dicionário com valores de sigma, S e X.
         state: Estado da conversa.
+        options: Opções adicionais de geração (opcional).
     
     Returns:
         Dicionário com a resposta e métricas do Modelo X.
     """
     prompt = build_main_prompt(message, state, energy_vector, sigma_S_X)
-    raw_answer = call_llm(prompt)
+    raw_answer = call_llm(prompt, options)
 
     return {
         "answer_text": raw_answer,
@@ -152,4 +225,20 @@ def generate_answer(message: str,
         "sigma": sigma_S_X["sigma"],
         "S": sigma_S_X["S"],
         "X": sigma_S_X["X"]
+    }
+
+
+def get_model_info() -> Dict[str, Any]:
+    """
+    Retorna informações sobre a configuração atual do modelo.
+    
+    Returns:
+        Dicionário com informações de configuração.
+    """
+    return {
+        "model_name": OLLAMA_MODEL_NAME,
+        "base_url": OLLAMA_BASE_URL,
+        "max_prompt_length": MAX_PROMPT_LENGTH,
+        "timeout": OLLAMA_TIMEOUT,
+        "generation_options": _build_generation_options()
     }

@@ -237,7 +237,7 @@ ollama pull llama3
 **Soluções:**
 1. Aguarde mais tempo (a primeira resposta pode demorar)
 2. Use um modelo menor: `ollama pull phi3`
-3. Aumente o timeout em `generator.py`: `OLLAMA_TIMEOUT = 120`
+3. Aumente o timeout via variável de ambiente: `export OLLAMA_TIMEOUT=180`
 
 ### Resposta truncada ou incompleta
 
@@ -246,36 +246,64 @@ ollama pull llama3
 **Solução:** O sistema trunca automaticamente prompts muito longos. Se isso acontecer frequentemente, considere:
 - Reduzir o histórico de conversa
 - Usar um modelo com contexto maior
+- Aumentar o limite: `export MAX_PROMPT_LENGTH=16000`
 
 ---
 
 ## 8. Configuração avançada
 
-### Alterando o modelo
+O Model X Agent pode ser configurado através de **variáveis de ambiente** ou editando diretamente o código.
+
+### Variáveis de ambiente disponíveis
+
+| Variável | Padrão | Descrição |
+|----------|--------|-----------|
+| `OLLAMA_MODEL` | `llama3` | Nome do modelo a usar |
+| `OLLAMA_URL` | `http://127.0.0.1:11434` | URL base do Ollama |
+| `OLLAMA_TIMEOUT` | `120` | Timeout em segundos |
+| `OLLAMA_TEMPERATURE` | `0.3` | Temperatura (0-1) |
+| `OLLAMA_TOP_P` | `0.9` | Top-p sampling |
+| `OLLAMA_TOP_K` | `40` | Top-k sampling |
+| `OLLAMA_NUM_PREDICT` | `2048` | Máximo de tokens na resposta |
+| `OLLAMA_REPEAT_PENALTY` | `1.1` | Penalidade por repetição |
+| `MAX_PROMPT_LENGTH` | `12000` | Limite de caracteres do prompt |
+
+### Exemplo de uso com variáveis de ambiente
+
+```bash
+# Linux/macOS
+export OLLAMA_MODEL="phi3"
+export OLLAMA_TEMPERATURE="0.5"
+export OLLAMA_TIMEOUT="180"
+uvicorn backend.main:app --reload
+
+# Windows PowerShell
+$env:OLLAMA_MODEL="phi3"
+$env:OLLAMA_TEMPERATURE="0.5"
+uvicorn backend.main:app --reload
+```
+
+### Alterando o modelo via código
 
 Edite `backend/coding_engineering/generator.py`:
 
 ```python
-OLLAMA_MODEL_NAME = "phi3"  # ou outro modelo
+OLLAMA_MODEL_NAME = os.getenv("OLLAMA_MODEL", "phi3")  # modelo padrão alterado
 ```
 
-### Alterando o timeout
+### Ajustando a temperatura
 
-```python
-OLLAMA_TIMEOUT = 120  # segundos
-```
+- **Temperatura baixa (0.0 - 0.3)**: Respostas mais determinísticas e focadas
+- **Temperatura média (0.4 - 0.6)**: Balanço entre criatividade e consistência
+- **Temperatura alta (0.7 - 1.0)**: Respostas mais criativas e variadas
 
-### Alterando o limite de prompt
-
-```python
-MAX_PROMPT_LENGTH = 12000  # caracteres
-```
+Para o Model X Agent, recomendamos temperatura baixa (0.3) para respostas consistentes sobre o Modelo X.
 
 ### Usando um servidor Ollama remoto
 
-```python
-OLLAMA_BASE_URL = "http://192.168.1.100:11434"
-OLLAMA_GENERATE_ENDPOINT = f"{OLLAMA_BASE_URL}/api/generate"
+```bash
+export OLLAMA_URL="http://192.168.1.100:11434"
+uvicorn backend.main:app --reload
 ```
 
 ---
