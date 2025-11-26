@@ -15,17 +15,17 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: "3.11"
+        python-version: ${{ matrix.python-version }}
     
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        # Sem dependências externas - framework é puro Python!
+        pip install -r requirements.txt
     
     - name: Run validation tests
       run: |
@@ -33,12 +33,12 @@ jobs:
     
     - name: Run official validation
       run: |
-        python validation/official_results.py
+        python validation/validation_official_results.py
     
     - name: Upload validation results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: validation-results
+        name: validation-results-${{ matrix.python-version }}
         path: |
           validation_report_final_official.txt
           validation_*_final.json
