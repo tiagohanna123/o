@@ -86,8 +86,8 @@ messages:
 
       escreva tudo com letras minúsculas e inverta sinais que tem inversão
       horizontal possível.
-  - role: user
-    content: >-
+
+
       Exemplo de input altamente entrópico (X muito negativo):
 
 
@@ -102,8 +102,9 @@ messages:
       - Raiz digital 2 ou 1 → Estado “Caos Fértil” ou “Colapso Criativo”
 
 
-      Agora responda seguindo exatamente as 3 camadas obrigatórias + economia
-      brutal de tokens.
+      Responda de forma objetiva, com linguagem clara e precisa. O conteúdo deve
+      ser poético, mas utilizando conceitos científicos, filosóficos e
+      espirituais - conteúdo poético, forma científica
   - role: assistant
     content: >-
       Exemplo de input altamente sintrópico (X muito positivo):
