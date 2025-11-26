@@ -140,7 +140,23 @@ messages:
 
       todo ponto, dê dois enters para pular uma linha
   - role: user
-    content: transforme em um post
+    content: >-
+      qual o melhor modelo de governança para os novos tempos? quero algo bem
+      moderno e que utilize IA como motor das decisões, sempre tendo respaldo do
+      povo.
+
+
+      faça um esboço do projeto que vou apresentar ao mundo onde as estruturas
+      sociais são corrigidas para atender ao máximo as necessidades de todos. as
+      coisas que não são possíveis de "dividir", tome uma decisão sobre o que é
+      melhor objetivamente e fundamente.
+
+
+      seja o máximo detalhista possível. se puder criar os orgãos/conselhos etc.
+      e dar nome a eles para organizar melhor ainda, é legal.
+
+
+      faça também um esboço de constituição
 model: mistral-ai/mistral-medium-2505
 modelParameters:
   max_completion_tokens: 11116
