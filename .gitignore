@@ -10,3 +10,6 @@ build/
 .pytest_cache/
 .coverage
 htmlcov/
+validation_*_final.json
+validation_report_final_official.txt
+VALIDATION_RESULTS.md
