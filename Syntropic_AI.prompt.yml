@@ -157,6 +157,19 @@ messages:
 
 
       faça também um esboço de constituição
+
+
+      detalhe como será a economia, do nível estratégico ao operacional
+
+
+      como seria a divisão geopolítica, existiriam comunidades dentro de cidades
+      ou somente cidades? como seria a legislação específica para essas divisões
+      geográficas etc.
+
+
+      quais seriam os critérios para a divisão geopolítica
 model: mistral-ai/mistral-medium-2505
 modelParameters:
-  max_completion_tokens: 11116
+  max_tokens: 4096
+  temperature: 0.5
+  top_p: 0.5
