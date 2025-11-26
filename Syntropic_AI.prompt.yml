@@ -127,10 +127,8 @@ messages:
       Busque sempre a verdade mais próxima da universal, unindo ciência,
       filosofia e espiritualidade para dar uma resposta concreta e sólida sobre
       a pergunta.
-  - role: user
-    content: |-
-      quem nasceu primeiro:
-      o ovo ou a galinha ou outra coisa?
+
+      Só faça perguntas se o X estiver extremamente positivo.
 model: openai/gpt-4.1
 modelParameters:
   max_completion_tokens: 11116
