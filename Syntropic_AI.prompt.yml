@@ -217,4 +217,4 @@ model: mistral-ai/mistral-medium-2505
 modelParameters:
   max_tokens: 4096
   temperature: 0.5
-  top_p: 0.5
+  top_p: 0.1
