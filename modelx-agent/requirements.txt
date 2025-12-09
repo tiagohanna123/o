@@ -1,4 +1,36 @@
-fastapi
-uvicorn
-pydantic
-requests
+# Model X Agent - Requirements
+# ============================
+# Sistema de IA com reasoning baseado no Model X (X = σ - S)
+# Integração com múltiplos LLMs open source gratuitos
+
+# === Core Dependencies ===
+fastapi>=0.100.0
+uvicorn>=0.22.0
+pydantic>=2.0.0
+requests>=2.28.0
+
+# === LLM Providers (todas as APIs são REST, sem deps extras) ===
+# Os seguintes provedores são suportados:
+#
+# 1. Ollama (Local, 100% gratuito)
+#    - Instalar: curl -fsSL https://ollama.ai/install.sh | sh
+#    - Rodar: ollama serve && ollama pull llama3
+#
+# 2. Hugging Face Inference API (Gratuito com rate limits)
+#    - Criar conta: huggingface.co
+#    - Obter token: huggingface.co/settings/tokens
+#    - Configurar: export HF_TOKEN=seu_token
+#
+# 3. Groq (Tier gratuito muito rápido - LPU)
+#    - Criar conta: console.groq.com
+#    - Obter API key
+#    - Configurar: export GROQ_API_KEY=sua_key
+#
+# 4. Together.ai (Créditos iniciais gratuitos)
+#    - Criar conta: together.ai
+#    - Obter API key
+#    - Configurar: export TOGETHER_API_KEY=sua_key
+
+# === Optional Dependencies ===
+# python-dotenv>=1.0.0  # Para carregar .env automaticamente
+# httpx>=0.24.0         # Alternativa async ao requests

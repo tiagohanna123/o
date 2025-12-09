@@ -1,11 +1,49 @@
+"""
+Generator de Respostas - Integração com Model X Reasoning Engine.
+
+Este módulo gera respostas usando o sistema de reasoning baseado no Model X,
+com suporte a múltiplos provedores de LLM gratuitos e open source:
+- Ollama (local)
+- Hugging Face Inference API
+- Groq (muito rápido)
+- Together.ai
+
+O sistema usa o Model X (X = σ - S) para:
+- Selecionar estratégia de reasoning
+- Adaptar o estilo de resposta
+- Auto-avaliar a qualidade
+"""
+
 from typing import Dict, Any, Optional
 import time
 import logging
 import os
 from .prompts import build_main_prompt
 
+# Importa o novo sistema de reasoning
+try:
+    from ..llm_providers import (
+        UnifiedLLMProvider,
+        GenerationConfig,
+        LLMProvider,
+        get_default_provider
+    )
+    from ..reasoning_engine import (
+        ModelXReasoningEngine,
+        get_reasoning_engine,
+        ReasoningStrategy
+    )
+    from ..chain_of_thought import (
+        ModelXChainOfThought,
+        ReflectiveReasoner,
+        get_chain_of_thought
+    )
+    NEW_REASONING_AVAILABLE = True
+except ImportError:
+    NEW_REASONING_AVAILABLE = False
+
 # ============================================================================
-# CONFIGURAÇÃO DO OLLAMA
+# CONFIGURAÇÃO DO OLLAMA (fallback/legacy)
 # ============================================================================
 
 # Nome do modelo a ser usado. Pode ser alterado para outros modelos disponíveis no Ollama.
@@ -17,6 +55,22 @@ OLLAMA_MODEL_NAME = os.getenv("OLLAMA_MODEL", "llama3")
 # Pode ser sobrescrita pela variável de ambiente OLLAMA_URL
 OLLAMA_BASE_URL = os.getenv("OLLAMA_URL", "http://127.0.0.1:11434")
 OLLAMA_GENERATE_ENDPOINT = f"{OLLAMA_BASE_URL}/api/generate"
+
+# ============================================================================
+# CONFIGURAÇÃO DE REASONING
+# ============================================================================
+
+# Modo de geração: "simple" (direto), "reasoning" (Model X), "chain" (CoT), "reflective"
+GENERATION_MODE = os.getenv("GENERATION_MODE", "reasoning")
+
+# Provedor preferido: "auto", "ollama", "huggingface", "groq", "together"
+PREFERRED_PROVIDER = os.getenv("PREFERRED_PROVIDER", "auto")
+
+# Habilita chain-of-thought completo (mais lento, mais preciso)
+ENABLE_FULL_CHAIN = os.getenv("ENABLE_FULL_CHAIN", "false").lower() == "true"
+
+# Habilita reflexão iterativa (mais lento, melhor qualidade)
+ENABLE_REFLECTION = os.getenv("ENABLE_REFLECTION", "false").lower() == "true"
 
 # ============================================================================
 # PARÂMETROS DE GERAÇÃO
@@ -239,14 +293,205 @@ def generate_answer(message: str,
 def get_model_info() -> Dict[str, Any]:
     """
     Retorna informações sobre a configuração atual do modelo.
-    
+
     Returns:
         Dicionário com informações de configuração.
     """
-    return {
+    info = {
         "model_name": OLLAMA_MODEL_NAME,
         "base_url": OLLAMA_BASE_URL,
         "max_prompt_length": MAX_PROMPT_LENGTH,
         "timeout": OLLAMA_TIMEOUT,
-        "generation_options": _build_generation_options()
+        "generation_options": _build_generation_options(),
+        "generation_mode": GENERATION_MODE,
+        "preferred_provider": PREFERRED_PROVIDER,
+        "new_reasoning_available": NEW_REASONING_AVAILABLE
     }
+
+    # Adiciona status dos provedores se disponível
+    if NEW_REASONING_AVAILABLE:
+        try:
+            provider = get_default_provider()
+            info["providers_status"] = provider.get_status()
+        except Exception:
+            pass
+
+    return info
+
+
+def _get_preferred_llm_provider() -> Optional[LLMProvider]:
+    """Retorna o provedor LLM preferido baseado na configuração."""
+    if not NEW_REASONING_AVAILABLE:
+        return None
+
+    provider_map = {
+        "ollama": LLMProvider.OLLAMA,
+        "huggingface": LLMProvider.HUGGINGFACE,
+        "groq": LLMProvider.GROQ,
+        "together": LLMProvider.TOGETHER
+    }
+
+    return provider_map.get(PREFERRED_PROVIDER.lower())
+
+
+def generate_with_reasoning(
+    message: str,
+    energy_vector: Dict[str, float],
+    sigma_S_X: Dict[str, float],
+    state,
+    mode: Optional[str] = None
+) -> Dict[str, Any]:
+    """
+    Gera resposta usando o sistema de reasoning avançado do Model X.
+
+    Modos disponíveis:
+    - "simple": Geração direta via LLM (mais rápido)
+    - "reasoning": Usa Model X Reasoning Engine (balanceado)
+    - "chain": Chain of Thought completo (mais detalhado)
+    - "reflective": Raciocínio com reflexão iterativa (melhor qualidade)
+
+    Args:
+        message: Mensagem do usuário
+        energy_vector: Vetor de energia 10D
+        sigma_S_X: Dict com sigma, S e X
+        state: Estado da conversa
+        mode: Modo de geração (usa GENERATION_MODE se não especificado)
+
+    Returns:
+        Dict com resposta e métricas do Model X
+    """
+    if not NEW_REASONING_AVAILABLE:
+        logger.warning("Novo sistema de reasoning não disponível, usando fallback")
+        return generate_answer(message, energy_vector, sigma_S_X, state)
+
+    generation_mode = mode or GENERATION_MODE
+    sigma = sigma_S_X["sigma"]
+    S = sigma_S_X["S"]
+    X = sigma_S_X["X"]
+
+    preferred_provider = _get_preferred_llm_provider()
+
+    try:
+        if generation_mode == "simple":
+            # Modo simples: usa diretamente o LLM provider
+            provider = get_default_provider()
+            prompt = build_main_prompt(message, state, energy_vector, sigma_S_X)
+            response = provider.generate(prompt, preferred_provider=preferred_provider)
+
+            return {
+                "answer_text": response.text if response.success else f"Erro: {response.error_message}",
+                "energy_vector": energy_vector,
+                "sigma": sigma,
+                "S": S,
+                "X": X,
+                "generation_mode": "simple",
+                "provider": response.provider.value if response.success else "none",
+                "latency_ms": response.latency_ms
+            }
+
+        elif generation_mode == "reasoning":
+            # Modo reasoning: usa Model X Reasoning Engine
+            engine = get_reasoning_engine()
+
+            # Prepara contexto da conversa
+            context = None
+            if hasattr(state, 'messages') and state.messages:
+                recent = state.messages[-4:]
+                context = "\n".join([f"{m.role}: {m.content[:200]}" for m in recent])
+
+            result = engine.reason(
+                question=message,
+                sigma=sigma,
+                S=S,
+                X=X,
+                energy_vector=energy_vector,
+                context=context,
+                preferred_provider=preferred_provider,
+                full_chain=ENABLE_FULL_CHAIN
+            )
+
+            return {
+                "answer_text": result.answer,
+                "energy_vector": energy_vector,
+                "sigma": sigma,
+                "S": S,
+                "X": X,
+                "generation_mode": "reasoning",
+                "strategy": result.strategy_used.value,
+                "confidence": result.confidence,
+                "provider": result.provider_used,
+                "latency_ms": result.latency_ms,
+                "thought_chain": [t.to_dict() for t in result.thought_chain] if ENABLE_FULL_CHAIN else []
+            }
+
+        elif generation_mode == "chain":
+            # Modo chain: Chain of Thought completo
+            cot = get_chain_of_thought()
+
+            context = {"domain": "coding_engineering"}
+            if hasattr(state, 'root_question'):
+                context["root_question"] = state.root_question
+
+            result = cot.think(
+                question=message,
+                initial_x=X,
+                sigma=sigma,
+                S=S,
+                context=context,
+                chain_type="default",
+                preferred_provider=preferred_provider
+            )
+
+            return {
+                "answer_text": result.final_answer,
+                "energy_vector": energy_vector,
+                "sigma": sigma,
+                "S": S,
+                "X": X,
+                "generation_mode": "chain",
+                "confidence": result.average_confidence,
+                "x_change": result.total_x_change,
+                "reflection": result.reflection_summary,
+                "latency_ms": result.latency_ms,
+                "thoughts": [t.to_dict() for t in result.thoughts]
+            }
+
+        elif generation_mode == "reflective":
+            # Modo reflective: raciocínio com reflexão iterativa
+            from ..chain_of_thought import get_reflective_reasoner
+            reasoner = get_reflective_reasoner()
+
+            context = {"domain": "coding_engineering"}
+            if hasattr(state, 'root_question'):
+                context["root_question"] = state.root_question
+
+            result = reasoner.reason(
+                question=message,
+                sigma=sigma,
+                S=S,
+                context=context,
+                preferred_provider=preferred_provider
+            )
+
+            return {
+                "answer_text": result["final_answer"],
+                "energy_vector": energy_vector,
+                "sigma": sigma,
+                "S": S,
+                "X": X,
+                "generation_mode": "reflective",
+                "confidence": result["final_confidence"],
+                "iterations": result["total_iterations"],
+                "converged": result["converged"],
+                "latency_ms": result["latency_ms"]
+            }
+
+        else:
+            # Fallback para modo simples
+            logger.warning(f"Modo desconhecido '{generation_mode}', usando simple")
+            return generate_with_reasoning(message, energy_vector, sigma_S_X, state, "simple")
+
+    except Exception as e:
+        logger.error(f"Erro no reasoning: {e}")
+        # Fallback para método legado
+        return generate_answer(message, energy_vector, sigma_S_X, state)
