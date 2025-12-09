@@ -31,6 +31,14 @@ requests>=2.28.0
 #    - Obter API key
 #    - Configurar: export TOGETHER_API_KEY=sua_key
 
+# === Frontend Auto-Gerado (escolha um) ===
+# Gradio - Interface simples e bonita para IA
+# gradio>=4.0.0
+
+# Streamlit - Dashboard interativo com métricas
+# streamlit>=1.28.0
+# pandas>=2.0.0
+
 # === Optional Dependencies ===
 # python-dotenv>=1.0.0  # Para carregar .env automaticamente
 # httpx>=0.24.0         # Alternativa async ao requests
